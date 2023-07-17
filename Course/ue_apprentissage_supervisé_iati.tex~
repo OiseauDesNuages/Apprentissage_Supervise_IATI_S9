@@ -1,0 +1,148 @@
+% Created 2023-04-17 Mon 09:02
+% Intended LaTeX compiler: pdflatex
+\documentclass[pressentation,10pt,aspectratio=169,xcolor=table, colorlinks=true]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{overlock}\usepackage[english]{babel}
+\usepackage{tikz, pgfplots}\usepackage{smartdiagram}
+\usetikzlibrary{arrows,shapes,positioning,mindmap,decorations.pathreplacing,backgrounds,overlay-beamer-styles,calc,3d,fit}
+\pgfplotsset{/pgf/number format/assume math mode=true}\usepackage{csquotes}
+\usepackage[citestyle=verbose, backend=biber]{biblatex}\addbibresource{refs.bib}
+\usepackage[type={CC}, modifier={by-sa}, version={4.0},]{doclicense}
+\pgfplotsset{compat=1.17} 
+\hypersetup{
+    colorlinks = true
+}
+% Short beamer templating
+%% \titlegraphic{\includegraphics[width=0.125\linewidth]{logo_cesbio_transp.pdf}}
+\usetheme{default}
+\usecolortheme[snowy]{owl}
+\setbeamertemplate{navigation symbols}{}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{itemize item}{$\bullet$}
+\setbeamertemplate{itemize subitem}{$\star$}
+\setbeamercolor{block body}{parent=normal text,use=block title,bg=black!5,}
+\setbeamercolor{block title}{fg=black, bg=gray}
+\setbeamertemplate{blocks}[rounded][shadow=false,] 
+
+\author[M. Fauvel]{Mathieu FAUVEL}
+\date{\today}
+\title{UE Apprentissage SIA S9}
+\subtitle{Supervise Learning}
+\institute{CESBIO, Universit{\'e} de Toulouse, CNES/CNRS/INRAe/IRD/UPS, Toulouse, FRANCE}
+\begin{document}
+\maketitle
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+  \frametitle{Myself}
+  \begin{itemize}
+  \item Contact: mathieu.fauvel@inrae.fr
+  \item Ph.D. degree in signal and image processing from the National Polytechnic Institute, Grenoble, France, and the University of Iceland, in 2007
+  \item Post-doc position at INRIA - MISTIS Team, 2008-2010
+  \item Assistant Professor (Grenoble, 2007-2008 \& Toulouse, 2010-2011)
+  \item Associate Professor at DYNAFOR, National Polytechnic Institute, Toulouse, between 2011-2018.
+  \item Since 2018, Research (CR1) at CESBIO, INRA.
+  \item Research interests are: machine learning for environmental/ecological monitoring
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Course Objectives}
+  TBC
+\end{frame}
+
+\begin{frame}
+  \frametitle{What is Supervised Learning ?}
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Main notations}
+  \begin{block}{Data}
+    \begin{itemize}
+    \item Observed data \(\mathbf{x}\in \mathbb{R}^d\), called \emph{input variables} or \emph{predictors}.
+    \item Data to be predicted \(y\in \mathbb{R}^p\), called \emph{output variables} or \emph{responses}.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}<2->{Learning Problem}
+    \begin{itemize}
+    \item If \(y\) are quantitative data: \emph{regression} and \(y\in\mathbb{R}^p\).
+    \item If \(y\) are categorical data:  \emph{classification} and \(y\in\{C_1, \ldots, C_C\}\) with \(C_i\) refers to the \(i^{th}\) category.
+    \end{itemize}
+  \end{block}
+
+  \begin{block}<3->{Prediction function}
+    \begin{eqnarray*}
+      f_{\boldsymbol{\theta}}: \mathbb{R}^d & \to & \mathbb{R}^p\\
+      \mathbf{x}&  \mapsto & y
+    \end{eqnarray*}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{References}
+
+  \begin{itemize}
+  \item \cite{zhang2021dive}
+    
+  \item \cite{prince2023understanding}
+
+  \item \cite{pml1Book}
+
+  \item \cite{pml2Book}
+  \end{itemize}
+  
+\end{frame}
+
+\section{Introductory Example - Linear model}
+% Predict function
+% Loss and Objective functions
+% Gradient
+% Optimization and Batch optim
+
+\subsection{Linear model for regression}
+
+
+\subsection{Linear model for classification}
+
+\section{Convolutional Neural Networks}
+
+\section{Transformer}
+
+
+
+\begin{frame}[fragile,allowframebreaks,label=]{Bibliography}
+\printbibliography
+\end{frame}
+
+\begin{frame}[label={sec:orgc74e2e4},noframenumbering]{}
+\begin{center}
+\small
+\doclicenseLongText
+
+\doclicenseImage
+\end{center}
+\end{frame}
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
