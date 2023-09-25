@@ -62,5 +62,5 @@ You can recover the environment used for the labworks with (for linux OS):
 conda env create --name my-env --file environment.yml
 #+end_src
 
-The =environment.yml= file is here: [[./environment.yml]]
+The =environment.yml= file is here: [[./environment.yml][environment.yml]]
 
