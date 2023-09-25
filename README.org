@@ -1,1 +1,56 @@
 #+TITLE: UE Apprentissage SIA S9
+
+* How to get the course
+
+In order to download all the material, just do in the terminal:
+#+begin_src sh
+git clone https://gitlab.cesbio.omp.eu/fauvelm/n7_iati.git
+#+end_src
+
+then enter in the repository
+#+begin_src sh
+cd n7_iati
+#+end_src
+
+If you run the following command you should get something like
+#+begin_src sh :results code
+tree -L 1
+#+end_src
+
+#+RESULTS:
+#+begin_src sh
+.
+├── auto
+├── Course
+├── Notebooks
+├── #README.org#
+├── README.org
+└── README.org~
+
+4 directories, 3 files
+#+end_src
+
+The repertory =Course= contains the pdf used during the session and =Notebooks= contains the associated jupyter notebooks.
+
+* Course organization
+| Days                | Start | End   | Duration | Name                                      | Teacher        | Room         |
+|---------------------+-------+-------+----------+-------------------------------------------+----------------+--------------|
+| Mardi 26/09/2023    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Mardi 26/09/2023    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Jeudi 05/10/2023    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | As205, As204 |
+| Jeudi 05/10/2023    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | As205, As204 |
+| Mardi 10/10/2023    | 14h00 | 15h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Mardi 10/10/2023    | 16h15 | 18h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Mardi 17/10/2023    | 08h00 | 09h45 | 01h45    | N9EE41C - TP - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Mardi 17/10/2023    | 10h15 | 12h00 | 01h45    | N9EE41C - TP - Apprentissage supervisé    | Fauvel Mathieu | C304         |
+| Jeudi 19/10/2023    | 08h00 | 09h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C205         |
+| Lundi 23/10/2023    | 10h15 | 12h00 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C206         |
+| Lundi 23/10/2023    | 16h15 | 18h00 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C301         |
+| Lundi 13/11/2023    | 16h15 | 18h00 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C306         |
+| Mardi 21/11/2023    | 08h00 | 09h45 | 01h45    | N9EE41C - TP - Apprentissage supervisé    | Fauvel Mathieu | C306         |
+| Vendredi 01/12/2023 | 14h00 | 15h45 | 01h45    | N9EE41C - EXAM - Apprentissage supervisé  | Fauvel Mathieu | C306         |
+
+The evaluation will be
+- Home Labwork: 40%, by pair.
+- Exam: 60%, individual (notes and course materials allowed).
+
