@@ -54,3 +54,13 @@ The evaluation will be
 - Home Labwork: 40%, by pair.
 - Exam: 60%, individual (notes and course materials allowed).
 
+  
+* Python Environnment
+You can recover the environment used for the labworks with (for linux OS):
+#+begin_src sh
+# replace my-env by the name you want
+conda env create --name my-env --file environment.yml
+#+end_src
+
+The =environment.yml= file is here: [[./environment.yml]]
+
