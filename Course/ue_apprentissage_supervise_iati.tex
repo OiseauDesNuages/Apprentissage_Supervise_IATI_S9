@@ -28,7 +28,7 @@
 }
 
 \AtBeginSection{%
-  \begin{frame}<beamer>
+  \begin{frame}<beamer>[plain]
     \frametitle{Outline}
     \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
   \end{frame}
@@ -95,7 +95,17 @@
 
 \begin{frame}
   \frametitle{Course Objectives}
-  TBC
+  \begin{itemize}
+  \item Learn basics of modern machine learning
+  \item Understand how each step works
+    \begin{itemize}
+    \item Data préparation
+    \item Model definition
+    \item Optimization step
+    \end{itemize}
+  \item Implement various Deep Learning models in PyTorch
+  \item Application to Computer Vision
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -409,7 +419,7 @@
 
 
 \section{Multi layer Perceptron}
-
+\subsection{Going deeper}
 \begin{frame}
   \frametitle{Activation function}
   \begin{itemize}
@@ -421,22 +431,22 @@
     \item Tanh: \(\tanh(x)\)
     \end{itemize}
   \end{itemize}
-    \begin{center}
-      \begin{tikzpicture}
-        \begin{groupplot}[group style={group size=2 by 1}, domain=-4:4, samples=200, grid,  footnotesize, xmin=-4,xmax=4]
-          \nextgroupplot[title=Activation function, very thick, ymin=-1,ymax=2]
-          \addplot[blue] {x>0 ? x:0};
-          \addplot[orange] {tanh(x)};
-          \addplot[green] {1/(1+exp(-x))};
-          \nextgroupplot[title=Derivative, very thick, ymin=-0,ymax=1, legend pos=outer north east, legend cell align=left]
-          \addplot[blue] {x>0 ? 1:0};
-          \addplot[orange] {1-tanh(x)*tanh(x)};
-          \addplot[green] {(1/(1+exp(-x)))*(1-1/(1+exp(-x)))};
-          \legend{Relu, Tanh, Sigmoid}
-        \end{groupplot}
-      \end{tikzpicture}
-    \end{center}
-    
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{groupplot}[group style={group size=2 by 1}, domain=-4:4, samples=200, grid,  footnotesize, xmin=-4,xmax=4]
+        \nextgroupplot[title=Activation function, very thick, ymin=-1,ymax=2]
+        \addplot[blue] {x>0 ? x:0};
+        \addplot[orange] {tanh(x)};
+        \addplot[green] {1/(1+exp(-x))};
+        \nextgroupplot[title=Derivative, very thick, ymin=-0,ymax=1, legend pos=outer north east, legend cell align=left]
+        \addplot[blue] {x>0 ? 1:0};
+        \addplot[orange] {1-tanh(x)*tanh(x)};
+        \addplot[green] {(1/(1+exp(-x)))*(1-1/(1+exp(-x)))};
+        \legend{Relu, Tanh, Sigmoid}
+      \end{groupplot}
+    \end{tikzpicture}
+  \end{center}
+  
 \end{frame}
 
 \begin{frame}[fragile]{Multi Layer Perceptron (MLP)}
@@ -579,6 +589,8 @@
   \end{columns}
 \end{frame}
 
+\subsection{Needs some regularization}
+
 \begin{frame}
   \frametitle{Generalization Error}
   \begin{itemize}
@@ -631,13 +643,23 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{To do}
+  \begin{work}
+    \begin{itemize}
+    \item Implement early stopping
+    \item Implement dropout
+    \item (Optional) Implement Tikhonov regulatization (weight decay in pytorch)
+    \end{itemize}
+  \end{work}
+\end{frame}
+
 
 \section{Convolutional Neural Networks}
 \subsection{Concepts}
-\begin{frame}{Image are not a vector of pixels}
+\begin{frame}{An image is not a vector of pixels}
   \begin{center}
     \begin{tabular}{cc}
-      \includegraphics[width=0.25\linewidth]{figures/im.png} & \includegraphics[width=0.25\linewidth]{figures/im_sort.png}
+      \includegraphics[width=0.35\linewidth]{figures/im.png} & \includegraphics[width=0.35\linewidth]{figures/im_sort.png}
     \end{tabular}
   \end{center}
 \end{frame}
@@ -651,11 +673,7 @@
         \begin{align*}
           x^{(1)}_{pq} &=& \sigma\Bigg(\sum_{i,j=1}^{H,W}\mathbf{w}_{pqij}^{(0)}x_{ij}^{(0)} + b_{pq}^{(0)} \Bigg)
         \end{align*}
-      \item Remove dependence w.r.t to pixel position \(\approx\) translation invariant
-        \begin{align*}
-          x^{(1)}_{pq} &=& \sigma\Bigg(\sum_{i,j=1}^{H,W}\mathbf{w}_{ij}^{(0)}x_{ij}^{(0)} + b^{(0)} \Bigg)
-        \end{align*}
-        
+
       \item Act locally: restrict to neighborhood of pixel \(p,q\)
         \begin{align*}
           x^{(1)}_{pq} &=& \sigma\Bigg(\sum_{i,j=-\Delta}^{i,j=+\Delta,}\mathbf{w}_{ij}^{(0)}x_{(p+i)(j+q)}^{(0)} + b^{(0)} \Bigg)
@@ -677,21 +695,7 @@
           \end{tikzpicture}
         \end{center}
       }
-      \only<2>{
-        \begin{center}
-          \begin{tikzpicture}[>=stealth,thick,baseline]
-            \matrix [matrix of math nodes,left delimiter=(,right delimiter=),ampersand replacement=\&, ](W){%
-              w_{11} \& w_{12} \& \dots  \& w_{1j} \& \dots \& w_{1W}\\
-              w_{21} \& w_{22} \& \dots  \& w_{2j} \& \dots \& w_{2W}\\  
-              \vdots  \& \vdots  \&  \& \vdots  \&  \& \vdots\\
-              w_{i1} \& w_{i2} \& \dots  \& w_{ij} \& \dots \& w_{iW}\\
-              \vdots  \& \vdots  \&  \& \vdots  \&  \& \vdots\\
-              w_{H1} \& w_{H2} \& \dots  \& w_{Hj} \& \dots \& w_{HW}\\
-            };
-          \end{tikzpicture}
-        \end{center}
-      }
-      \only<3->{
+      \only<2->{
         \begin{center}
           \begin{tikzpicture}[>=stealth,thick,baseline]
             \matrix [matrix of math nodes,left delimiter=(,right delimiter=),ampersand replacement=\&, ](W){%
@@ -920,8 +924,7 @@
       \begin{itemize}
       \item Express multi-channels \& multi-outputs convolution as a matrix product.
       \item Show that the successive convolution with two kernels is equivalent to one convolution.
-      \item Show that \(\max(x, y)\) can written using 1D-Convolution and ReLU
-      \item What king of padding will you use with max pooling ?
+      \item What stride size wiil you use for a max pooling with a kernel of size \(2 \times 2\)?
       \item Implement a CNN for the classification of \emph{Fashion MNIST} data set: use one or two convolutional layers for the MLP.
       \end{itemize}
     \end{work}    
@@ -947,7 +950,7 @@
         \item What happen if the batch size is one ?
         \item What happen if the batch size is small ?
         \item What should we do in \emph{prediction} mode ?
-        \item Add normalization layer (1D and 2D) to your model.
+        \item Add normalization layer (2D) to your model.
         \end{itemize}
       \end{work}
     }
@@ -1040,7 +1043,10 @@
   {\small From \cite{10.5555/3327345.3327535}}
 }
   \end{frame}
-\section{Transformer}
+% \section{Transformer}
+
+% \subsection{Attention}
+
 
 
 
