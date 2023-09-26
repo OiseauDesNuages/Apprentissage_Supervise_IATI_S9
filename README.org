@@ -32,6 +32,10 @@ tree -L 1
 
 The repertory =Course= contains the pdf used during the session and =Notebooks= contains the associated jupyter notebooks.
 
+To update the repository
+#+begin_src sh
+git pull gitlabc_cesbio main
+#+end_src
 * Course organization
 | Days                | Start | End   | Duration | Name                                      | Teacher        | Room         |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+--------------|
