@@ -11,7 +11,7 @@
 \usepackage{capt-of}
 \usepackage{overlock}\usepackage[english]{babel}
 \usepackage{tikz, pgfplots}\usepackage{smartdiagram}
-\usetikzlibrary{arrows,shapes,positioning,mindmap,decorations.pathreplacing,backgrounds,overlay-beamer-styles,calc,3d,fit,matrix,graphs}
+\usetikzlibrary{arrows,shapes,positioning,mindmap,decorations.pathreplacing,backgrounds,overlay-beamer-styles,calc,3d,fit,matrix,graphs, arrows.meta}
 \usepgfplotslibrary{groupplots}
 \pgfplotsset{/pgf/number format/assume math mode=true}\usepackage{csquotes}
 \usepackage[outline]{contour} % glow around text
@@ -28,22 +28,43 @@
 }
 
 \AtBeginSection{%
+  % \begin{frame}<beamer>[plain]
+  %   \frametitle{Outline}
+  %   \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
+  % \end{frame}
   \begin{frame}<beamer>[plain]
     \frametitle{Outline}
-    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
-  \end{frame}
+    \begin{columns}[onlytextwidth,T]
+        \begin{column}{.45\textwidth}
+            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=1-4]
+        \end{column}
+        \begin{column}{.45\textwidth}
+            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=5-6]
+        \end{column}
+    \end{columns}
+\end{frame}
   \addtocounter{framenumber}{-1}
 }%
 
 \AtBeginSubsection{%
+  % \begin{frame}<beamer>[plain]
+  %   \frametitle{Outline}
+  %   \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
+  % \end{frame}
   \begin{frame}<beamer>[plain]
     \frametitle{Outline}
-    \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
-  \end{frame}
+    \begin{columns}[onlytextwidth,T]
+        \begin{column}{.45\textwidth}
+            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=1-4]
+        \end{column}
+        \begin{column}{.45\textwidth}
+            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=5-6]
+        \end{column}
+    \end{columns}
+\end{frame}
   \addtocounter{framenumber}{-1}
-}
-% Short beamer templating
-%% \titlegraphic{\includegraphics[width=0.125\linewidth]{logo_cesbio_transp.pdf}}
+}%
+
 \usetheme{default}
 \usecolortheme[snowy]{owl}
 \setbeamertemplate{navigation symbols}{}{}
@@ -67,7 +88,14 @@
 
 \begin{frame}
   \frametitle{Outline}
-  \tableofcontents[hideallsubsections]
+    \begin{columns}[onlytextwidth,T]
+        \begin{column}{.45\textwidth}
+            \tableofcontents[hideallsubsections, subsectionstyle=shaded, sections=1-4]
+        \end{column}
+        \begin{column}{.45\textwidth}
+            \tableofcontents[hideallsubsections, subsectionstyle=shaded, sections=5-6]
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \section{Introduction}
@@ -176,6 +204,8 @@
   \item \cite{zhang2021dive}
     
   \item \cite{prince2023understanding}
+
+  \item \cite{mlbook2022}
 
   \item \cite{pml1Book}
 
@@ -1042,13 +1072,289 @@
 
   {\small From \cite{10.5555/3327345.3327535}}
 }
-  \end{frame}
-% \section{Transformer}
+\end{frame}
 
-% \subsection{Attention}
+\section{Recurrent Neural Networks}
+
+\subsection{When order matters}
+\begin{frame}
+  \frametitle{Sequential data}
+
+  \begin{itemize}
+  \item Time series
+    \begin{center}
+      \begin{tikzpicture}
+        \begin{axis}[domain=0:10, samples=200, grid, very thick, footnotesize, ymin=-1.0, ymax=1.0, xmin=0, xmax=15, width=0.5\linewidth, height=0.25\linewidth]
+          \addplot[red] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[blue, domain=10:15, dashed] {sin(deg(x))*exp(-x/10)};
+        \end{axis}
+      \end{tikzpicture}
+    \end{center}
+  \item Text data
+    \begin{center}
+      \Large
+      \textcolor{red}{This course is really} \textcolor{blue}{cool}
+    \end{center}
+  \end{itemize}
+\end{frame}
 
 
+\begin{frame}{Auto-regressive model}
+  \begin{itemize}
+  \item Autogressive models: \(p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)\)
+  \item Sequence model:
+    \[p(\mathbf{x}_T , \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)p(\mathbf{x}_1) \]
+  \item Markov model:
+    \[p(\mathbf{x}_T | \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t |\mathbf{x}_{t-1}) p(\mathbf{x}_1)\]
+  \item <2> Example: \(p(\mathbf{x}_t |\mathbf{x}_{t-1})\) could model
+    \begin{itemize}
+    \item The probability to get letter after a observing a specific letter (or a set of)
+    \item The expected value of a signal given past values of the same signal
+    \end{itemize}
+    
+  \end{itemize}
+  
+\end{frame}
 
+% \begin{frame}
+%   \frametitle{Main sequence models}
+%   \begin{center}
+%     \begin{tikzpicture}[=>latex]
+%       \node (x0) [] {\(x_0\)};
+%       \node (x1) [right of=x0] {\(x_1\)};
+%       \node (x2) [right of=x1] {\(x_2\)};     
+%       \node (h0) [above of=x0] {\(h_0\)};
+%       \node (h1) [right of=h0] {\(h_1\)};
+%       \node (h2) [right of=h1] {\(h_2\)};
+%       \node (o) [above of=h0] {\(o\)};
+%     \end{tikzpicture}
+%   \end{center}
+% \end{frame}
+
+
+\begin{frame}{Latent autoregressive model}
+  \begin{columns}
+    \begin{column}{0.55\linewidth}
+      \begin{center}
+        \begin{tikzpicture}[=>latex, node distance=2cm]
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x0) [ ] {\(\mathbf{x}_{t-1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x1) [right of=x0] {\(\mathbf{x}_{t}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x2) [right of=x1] {\(\mathbf{x}_{t+1}\)};     
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h0) [above of=x0] {\(\mathbf{h}_{t-1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h1) [right of=h0] {\(\mathbf{h}_{t}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h2) [right of=h1] {\(\mathbf{h}_{t+1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o0) [above of=h0] {\(\mathbf{o}_{t-1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o1) [right of=o0] {\(\mathbf{o}_{t}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o2) [right of=o1] {\(\mathbf{o}_{t+1}\)};
+
+          \node[] (hp) [left of=h0] {};
+          \node[] (hf) [right of=h2] {};
+          
+          \draw[->] (h0)--(h1);
+          \draw[->] (h1)--(h2);
+          \draw[->] (x0)--(h0);
+          \draw[->] (x1)--(h1);
+          \draw[->] (x2)--(h2);
+          \draw[->] (h0)--(o0);
+          \draw[->] (h1)--(o1);
+          \draw[->] (h2)--(o2);
+          \draw[->, dashed] (hp)--(h0);
+          \draw[->, dashed] (h2)--(hf);
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \begin{itemize}
+      \item \(\mathbf{h}_t = f(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \sigma_{h}\big(\mathbf{W}_{hx}\mathbf{x}_{t} + \mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{b}_h\big)\)
+      \item \(\mathbf{o}_t = g(\mathbf{h}_{t}) = \sigma_{o}\big(\mathbf{W}_{oh}\mathbf{h}_t+\mathbf{b}_o\big)\)
+      \item Backpropagation through time - BPTT
+        \[\ell = \frac{1}{T}\sum_{t=1}^T\ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})\]
+        with \(\mathbf{h}_{0}= \mathbf{0}\)
+      \end{itemize}
+      
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Issue with BPTT}
+  \begin{align*}
+    \frac{\partial \ell}{\partial \mathbf{W}_{hh}} =&    \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial \mathbf{W}_{hh}} \\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial{\mathbf{o}}_{t}}{\partial \mathbf{W}_{hh}} \\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} + \frac{f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial\mathbf{h}_{t-1}}\frac{\partial \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\bigg]\\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\Bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} +  \textcolor{blue}{ \sum_{p=1}^{t-1}\bigg(\prod_{q=p+1}^{t} \frac{\partial f(\mathbf{x}_{q}, \mathbf{h}_{q-1})}{\partial \mathbf{h}_{q-1}} \bigg) \frac{\partial f(\mathbf{x}_{p}, \mathbf{h}_{p-1})}{\partial \mathbf{W}_{hh}}}\Bigg]\\
+  \end{align*}
+  
+\end{frame}
+
+\subsection{Modern RNN}
+
+\begin{frame}[fragile]
+  \frametitle{Long Short Term Memory  (LSTM)}
+  \begin{columns}
+    \begin{column}{0.65\linewidth}
+      \newcommand{\empt}[2]{$\mathbf{#1}^{(#2)}$}
+      
+      \begin{tikzpicture}[
+        % GLOBAL CFG
+        font=\sf \scriptsize,
+        >=LaTeX,
+        % Styles
+        cell/.style={% For the main box
+          rectangle, 
+          rounded corners=5mm, 
+          draw,
+          very thick,
+        },
+        operator/.style={%For operators like +  and  x
+          circle,
+          draw,
+          inner sep=-0.5pt,
+          minimum height =.5cm,
+        },
+        function/.style={%For functions
+          ellipse,
+          draw,
+          inner sep=1pt
+        },
+        ct/.style={% For external inputs and outputs
+          circle,
+          draw,
+          line width = .75pt,
+          minimum width=1cm,
+          inner sep=1pt,
+        },
+        gt/.style={% For internal inputs
+          rectangle,
+          draw,
+          minimum width=4mm,
+          minimum height=3mm,
+          inner sep=1pt
+        },
+        mylabel/.style={% something new that I have learned
+          font=\scriptsize\sffamily
+        },
+        ArrowC1/.style={% Arrows with rounded corners
+          rounded corners=.25cm,
+          thick,
+        },
+        ArrowC2/.style={% Arrows with big rounded corners
+          rounded corners=.5cm,
+          thick,
+        },
+        ]
+
+        % Start drawing the thing...    
+        % Draw the cell: 
+        \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
+
+        % Draw inputs named ibox#
+        \node [gt, label={[mylabel, shift={(0,0.25)}]left:\(\mathbf{F}_t\)}] (ibox1) at (-2,-0.75) {$\sigma$};
+        \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{I}_t\)}] (ibox2) at (-1.5,-0.75) {$\sigma$};
+        \node [gt, minimum width=1cm, label={[mylabel, shift={(-0.125,0.25)}]right:\(\tilde{\mathbf{C}}_t\)}] (ibox3) at (-0.5,-0.75) {$\tanh$};
+        \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{O}_t\)}] (ibox4) at (0.5,-0.75) {$\sigma$};
+
+        % Draw opérators   named mux# , add# and func#
+        \node [operator] (mux1) at (-2,1.5) {$\times$};
+        \node [operator] (add1) at (-0.5,1.5) {+};
+        \node [operator] (mux2) at (-0.5,0) {$\times$};
+        \node [operator] (mux3) at (1.5,0) {$\times$};
+        \node [function] (func1) at (1.5,0.75) {$\tanh$};
+
+        % Draw External inputs? named as basis c,h,x
+        \node[ct] (c) at (-4,1.5) {\empt{c}{t-1}};
+        \node[ct] (h) at (-4,-1.5) {\empt{h}{t-1}};
+        \node[ct] (x) at (-2.5,-3) {\empt{x}{t}};
+
+        % Draw External outputs? named as basis c2,h2,x2
+        \node[ct] (c2) at (4,1.5) {\empt{c}{t}};
+        \node[ct] (h2) at (4,-1.5) {\empt{h}{t}};
+        % \node[ct, label={[mylabel]left:Label3}] (x2) at (2.5,3) {\empt{h}{t}};
+
+        % Start connecting all.
+        % Intersections and displacements are used. 
+        % Drawing arrows    
+        \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
+
+        % Inputs
+        \draw [ArrowC2] (h) -| (ibox4);
+        \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
+        \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
+        \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
+        \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
+
+        % Internal
+        \draw [->, ArrowC2] (ibox1) -- (mux1);
+        \draw [->, ArrowC2] (ibox2) |- (mux2);
+        \draw [->, ArrowC2] (ibox3) -- (mux2);
+        \draw [->, ArrowC2] (ibox4) |- (mux3);
+        \draw [->, ArrowC2] (mux2) -- (add1);
+        \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
+        \draw [->, ArrowC2] (func1) -- (mux3);
+
+        % Outputs
+        \draw [-, ArrowC2] (mux3) |- (h2);
+        % \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
+        % \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
+        % \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
+
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.375\linewidth}
+      \begin{itemize}
+      \item Forget gate
+        \[\mathbf{F}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{fh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{fx}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_f\Big)\]
+      \item Input gate
+        \[\mathbf{I}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{ih}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ix}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_i\Big)\]
+      \item Input node
+        \[\tilde{\mathbf{C}}_t = \tanh\Big(\textcolor{blue}{\mathbf{W}}_{\tilde{c}h}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{\tilde{c}x}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_{\tilde{c}}\Big)\]
+      \item Output gate
+        \[\mathbf{O}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{oh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ox}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_o\Big)\]
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  {\small Good overview of LSTM: \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Sequence prediction with RNN 1/2}
+  \begin{block}{Learning (toy) problem}
+    Learn a function \(f\) that, given a fix sized sequence of characters, predicts the most probable next one from an alphabet
+
+    \[f(\text{\textcolor{blue}{T h i s   c o u r}}) = \text{\textcolor{red}{s}}\]
+    \[f(\text{\textcolor{blue}{i s   a w e s o m}}) = \text{\textcolor{red}{e}}\]
+  \end{block}
+  \begin{block}{Tokenization}
+    Tokenization is the action of cutting input data into parts that can be embedded into a vector space.
+\begin{minted}[breaklines]{python3}
+text ="This course is awesome"
+text_set = sorted(set(text))
+[' ', 'T', 'a', 'c', 'e', 'h', 'i', 'm', 'o', 'r', 's', 'u', 'w']
+char2int = {ch: i for i, ch in enumerate(text_set)}
+{' ': 0, 'T': 1, 'a': 2, 'c': 3, 'e': 4, 'h': 5, 'i': 6, 'm': 7, 'o': 8, 'r': 9, 's': 10, 'u': 11, 'w': 12}
+\end{minted}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}{Sequence prediction with RNN 2/2}
+  \begin{itemize}
+  \item Classification problem on sequence, \(x_t=\) token
+    \[\mathbf{x}_{T+1} = f(\mathbf{\mathbf{x}_T, \ldots, \mathbf{x}_0})\]
+  \item By-product: Once we have \(p(\mathbf{x}_{T+1}|\mathbf{x}_T, \ldots,\mathbf{x}_0)\) we can sample random text
+    \[p(\mathbf{x}_{T+1}|\mathbf{x}_T, \ldots,\mathbf{x}_0) \sim \text{Multinomial}\]
+  \end{itemize}
+
+  \begin{work}
+    \begin{itemize}
+    \item Implement a simple tokenizer in pytorch
+    \item Implement a RNN that learn to predict the next character of a sequence
+    \item Once trained, generate some sentences of varying size
+    \end{itemize}
+  \end{work}
+  
+\end{frame}
 
 % \begin{frame}[fragile,allowframebreaks]{Bibliography}
 %   \printbibliography
