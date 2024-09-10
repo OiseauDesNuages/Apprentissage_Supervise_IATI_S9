@@ -4,7 +4,7 @@
 
 In order to download all the material, just do in the terminal:
 #+begin_src sh
-git clone https://gitlab.cesbio.omp.eu/fauvelm/n7_iati.git
+git clone https://src.koda.cnrs.fr/mathieu.fauvel.4/n7_iati.git
 #+end_src
 
 then enter in the repository

@@ -7,6 +7,7 @@
     "pml1Book"
     "pml2Book"
     "mitchelllearning"
-    "10.5555/3327345.3327535"))
+    "10.5555/3327345.3327535"
+    "mlbook2022"))
  '(or :bibtex :latex))
 
