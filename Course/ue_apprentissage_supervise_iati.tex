@@ -22,6 +22,7 @@
 \pgfplotsset{compat=1.17}
 \usepackage{minted}\usemintedstyle{emacs}\usepackage[]{tcolorbox}
 \newtcolorbox[auto counter]{work}[1][]{colback=black!5!white,colframe=black!50!white,fonttitle=\sffamily\bfseries,title=Work}
+\newtcolorbox[auto counter]{discussion}[1][]{colback=black!5!white,colframe=red!50!white,fonttitle=\sffamily\bfseries,title=Discussion}
 
 \hypersetup{
   colorlinks = true
@@ -81,7 +82,7 @@
 \author[M. Fauvel]{Mathieu FAUVEL}
 \date{\today}
 \title{UE Apprentissage SIA S9}
-\subtitle{Supervise Learning}
+\subtitle{Supervised Learning}
 \institute{CESBIO, Universit{\'e} de Toulouse, CNES/CNRS/INRAe/IRD/UPS, Toulouse, FRANCE}
 \begin{document}
 \maketitle
@@ -124,7 +125,7 @@
 \begin{frame}
   \frametitle{Course Objectives}
   \begin{itemize}
-  \item Learn basics of modern machine learning
+  \item Learn modern supervised machine learning 
   \item Understand how each step works
     \begin{itemize}
     \item Data préparation
@@ -132,7 +133,7 @@
     \item Optimization step
     \end{itemize}
   \item Implement various Deep Learning models in PyTorch
-  \item Application to Computer Vision
+  \item Application to Computer Vision, Remote Sensing, Time Series
   \end{itemize}
 \end{frame}
 
@@ -201,7 +202,7 @@
   \frametitle{Online References}
 
   \begin{itemize}
-  \item \cite{zhang2021dive}
+  \item \cite{zhang2023dive}
     
   \item \cite{prince2023understanding}
 
@@ -279,8 +280,8 @@
       \only<2->{with H stands for \emph{Hubert loss}:
       \begin{align*}
         H(f(\mathbf{x}_i)-y_i) = \begin{cases}
-                                   \frac{1}{2}{(f(\mathbf{x}_i - y_i))}^2      & \text{for } |f(\mathbf{x}_i - y_i)| \le \delta, \\
-                                   \left(|f(\mathbf{x}_i - y_i)| - 0.5\right), & \text{otherwise.}
+                                   \frac{1}{2}\big(f(\mathbf{x}_i) - y_i\big)^2      & \text{for } |f(\mathbf{x}_i) - y_i| \le 1, \\
+                                   \left(|f(\mathbf{x}_i) - y_i| - 0.5\right), & \text{otherwise.}
                                  \end{cases}
       \end{align*}}
     \end{column}
@@ -312,11 +313,11 @@
     \end{align*}
   \item <2-> Parameter update
     \[\mathbf{w}_p^{(t+1)} = \mathbf{w}_p^{(t)} + \frac{\eta}{n}\sum_{i=1}^n\mathbf{e}_i^{(t)}\mathbf{x}_{ip}\]
-
     
   \item <3> Standardization of the input feature (and for regression the output too): \textcolor{orange}{scaling\_feature.ipynb}
     \[\tilde{\mathbf{x}} = (\mathbf{x}-\boldsymbol{\mu})\oslash\boldsymbol{\sigma}\]
   \end{itemize}
+  
   
 \end{frame}
 
@@ -392,7 +393,7 @@
       \item One hot encoding: \( y_i = c \rightarrow \mathbf{y}_{i} \in\mathbb{R}^C,\ \mathbf{y}_{ic}=1 \text{ if }i=c \text{ else } 0\)
       \item Likelihood:        
         \[l(\mathbf{y}_i, \hat{\mathbf{y}}_i) = \prod_{c'=1}^C p(y_i=c'|\mathbf{x}_i)^{\mathbf{y}_{ic'}} = \frac{\exp(\mathbf{z}_{ic})}{\sum_{c'=1}^C\exp(\mathbf{z}_{ic'})}\]
-      \item <2-> Negative log likelihood:
+      \item <2-> Negative log likelihood - \textbf{Cross entropy}:
         \begin{align*}
           \ell(\mathbf{y}_i, \hat{\mathbf{y}}_i) =& - \sum_{c'=1}^C\mathbf{y}_{ic'}\log\big\{p(y_i=c'|\mathbf{x}_i)\big\} \\
                                                  =& \textcolor{blue}{-\log\big\{p(y_i=c|\mathbf{x}_i)\big\}}\\
@@ -409,16 +410,18 @@
         \end{tikzpicture}
       \end{center}
 
-      \begin{work}
+      \begin{discussion}
         What happens if:
         \begin{itemize}
         \item All \(\mathbf{z}_{ic}\) are small ?
         \item One \(\mathbf{z}_{ic}\) is very large ?
         \item All \(\mathbf{z}_{ic}\) are very large ?
         \end{itemize}
-      \end{work}
+      \end{discussion}
     \end{column}
   \end{columns}
+
+  
 \end{frame}
 
 \begin{frame}
@@ -432,7 +435,7 @@
       \item Same comments than for regression
         \begin{itemize}
         \item Split train, val and test
-        \item Standardizatiton
+        \item Standardization
         \item Batch training
         \item Tune learning rate
         \end{itemize}
@@ -440,7 +443,10 @@
     \end{column}
     \begin{column}{0.5\linewidth}
       \begin{work}
-        Implement a linear classifier in pytorch for the classification of \href{https://github.com/zalandoresearch/fashion-mnist}{Fashion MNIST} data set.        
+        Implement a linear classifier in pytorch for the classification of \href{https://github.com/zalandoresearch/fashion-mnist}{Fashion MNIST} data set.
+        \begin{itemize}
+          \item Monitor 
+        \end{itemize}
       \end{work}
       
     \end{column}
@@ -723,7 +729,7 @@
               w_{pqH1} \& w_{pqH2} \& \dots  \& w_{pqHj} \& \dots \& w_{pqHW}\\
             };
           \end{tikzpicture}
-        \end{center}
+        \end{center}%
       }
       \only<2->{
         \begin{center}
@@ -950,14 +956,15 @@
   \end{frame}
 
   \begin{frame}{2D CNN}
-    \begin{work}
+    \begin{discussion}
       \begin{itemize}
-      \item Express multi-channels \& multi-outputs convolution as a matrix product.
       \item Show that the successive convolution with two kernels is equivalent to one convolution.
-      \item What stride size wiil you use for a max pooling with a kernel of size \(2 \times 2\)?
-      \item Implement a CNN for the classification of \emph{Fashion MNIST} data set: use one or two convolutional layers for the MLP.
+      \item What stride size would you use for a max pooling with a kernel of size \(2 \times 2\)?
       \end{itemize}
-    \end{work}    
+    \end{discussion}
+    \begin{work}
+      Implement a CNN for the classification of \emph{Fashion MNIST} data set: use one or two convolutional layers for the MLP.
+    \end{work}
   \end{frame}
 
   \subsection{How to improve the learning process}
@@ -969,19 +976,21 @@
     \item Similar problem may happen to each layer \textbf{but} we cannot use the same trick: the sample mean/variance change after each batch update !
     \item<2-> Apply normalization per batch: \emph{Batch Normalization}
       \begin{align*}
-        \tilde{\mathbf{x}}_B = \boldsymbol{\gamma}\odot\Big[(\mathbf{x}_B-\boldsymbol{\mu}_B)\oslash\boldsymbol{\sigma}_B\Big] + \boldsymbol{\beta}
+        \tilde{\mathbf{x}}_B = \textcolor{orange}{\boldsymbol{\gamma}}\odot\Big[(\mathbf{x}_B-\boldsymbol{\mu}_B)\oslash\boldsymbol{\sigma}_B\Big] + \textcolor{orange}{\boldsymbol{\beta}}
       \end{align*}
-      with \(\boldsymbol{\mu}_B\) and \(\boldsymbol{\sigma}_B\) computed on batch \(B\), and \(\boldsymbol{\gamma} \& \boldsymbol{\beta}\) are learnable parameters
+      with \(\boldsymbol{\mu}_B\) and \(\boldsymbol{\sigma}_B\) computed on batch \(B\), and \(\textcolor{orange}{\boldsymbol{\gamma}} \& \textcolor{orange}{\boldsymbol{\beta}}\) are learnable parameters
     \end{itemize}
 
     \visible<3>{
-      \begin{work}
+      \begin{discussion}
         \begin{itemize}
         \item What happen if the batch size is one ?
         \item What happen if the batch size is small ?
         \item What should we do in \emph{prediction} mode ?
-        \item Add normalization layer (2D) to your model.
         \end{itemize}
+      \end{discussion}
+      \begin{work}
+        Add normalization layer (2D) to your model.
       \end{work}
     }
   \end{frame}
@@ -1026,7 +1035,7 @@
         \end{tikzpicture}
       \end{center}
       \begin{align*}
-        \dfrac{\partial f_h(\mathbf{x})}{\partial \alpha_0} = \underrightarrow{\dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x})} \qquad         \dfrac{\partial g(\mathbf{x})}{\partial \alpha_1} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{\alpha_1}(\mathbf{x}^{(1)}) \qquad  \dfrac{\partial g(\mathbf{x})}{\partial \alpha_2} = \dfrac{g_2}{\alpha_2}(\mathbf{x}^{(2)})
+        \dfrac{\partial f_h(\mathbf{x})}{\partial \theta_0} = \underrightarrow{\dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\theta_0}(\mathbf{x})} \qquad         \dfrac{\partial g(\mathbf{x})}{\partial \theta_1} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{\theta_1}(\mathbf{x}^{(1)}) \qquad  \dfrac{\partial g(\mathbf{x})}{\partial \theta_2} = \dfrac{g_2}{\alpha_2}(\mathbf{x}^{(2)})
       \end{align*}}
   \only<3>{\item Let \(f_h = g_2\circ g_1\circ g_0\) with \emph{residual connection}
       \begin{center}
@@ -1143,9 +1152,9 @@
           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h0) [above of=x0] {\(\mathbf{h}_{t-1}\)};
           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h1) [right of=h0] {\(\mathbf{h}_{t}\)};
           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h2) [right of=h1] {\(\mathbf{h}_{t+1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o0) [above of=h0] {\(\mathbf{o}_{t-1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o1) [right of=o0] {\(\mathbf{o}_{t}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o2) [right of=o1] {\(\mathbf{o}_{t+1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o0) [above of=h0] {\(\hat{\mathbf{y}}_{t-1}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o1) [right of=o0] {\(\hat{\mathbf{y}}_{t}\)};
+          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o2) [right of=o1] {\(\hat{\mathbf{y}}_{t+1}\)};
 
           \node[] (hp) [left of=h0] {};
           \node[] (hf) [right of=h2] {};
@@ -1166,9 +1175,9 @@
     \begin{column}{0.5\linewidth}
       \begin{itemize}
       \item \(\mathbf{h}_t = f(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \sigma_{h}\big(\mathbf{W}_{hx}\mathbf{x}_{t} + \mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{b}_h\big)\)
-      \item \(\mathbf{o}_t = g(\mathbf{h}_{t}) = \sigma_{o}\big(\mathbf{W}_{oh}\mathbf{h}_t+\mathbf{b}_o\big)\)
+      \item \(\hat{\mathbf{y}}_t = g(\mathbf{h}_{t}) = \sigma_{o}\big(\mathbf{W}_{oh}\mathbf{h}_t+\mathbf{b}_o\big)\)
       \item Backpropagation through time - BPTT
-        \[\ell = \frac{1}{T}\sum_{t=1}^T\ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})\]
+        \[\ell = \frac{1}{T}\sum_{t=1}^T\ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})\]
         with \(\mathbf{h}_{0}= \mathbf{0}\)
       \end{itemize}
       
@@ -1179,10 +1188,10 @@
 \begin{frame}
   \frametitle{Issue with BPTT}
   \begin{align*}
-    \frac{\partial \ell}{\partial \mathbf{W}_{hh}} =&    \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial \mathbf{W}_{hh}} \\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial{\mathbf{o}}_{t}}{\partial \mathbf{W}_{hh}} \\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} + \frac{f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial\mathbf{h}_{t-1}}\frac{\partial \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\bigg]\\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\mathbf{o}}_{t})}{\partial {\mathbf{o}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\Bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} +  \textcolor{blue}{ \sum_{p=1}^{t-1}\bigg(\prod_{q=p+1}^{t} \frac{\partial f(\mathbf{x}_{q}, \mathbf{h}_{q-1})}{\partial \mathbf{h}_{q-1}} \bigg) \frac{\partial f(\mathbf{x}_{p}, \mathbf{h}_{p-1})}{\partial \mathbf{W}_{hh}}}\Bigg]\\
+    \frac{\partial \ell}{\partial \mathbf{W}_{hh}} =&    \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial \mathbf{W}_{hh}} \\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial{\hat{\mathbf{y}}}_{t}}{\partial \mathbf{W}_{hh}} \\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} + \frac{f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial\mathbf{h}_{t-1}}\frac{\partial \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\bigg]\\
+    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\Bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} +  \textcolor{blue}{ \sum_{p=1}^{t-1}\bigg(\prod_{q=p+1}^{t} \frac{\partial f(\mathbf{x}_{q}, \mathbf{h}_{q-1})}{\partial \mathbf{h}_{q-1}} \bigg) \frac{\partial f(\mathbf{x}_{p}, \mathbf{h}_{p-1})}{\partial \mathbf{W}_{hh}}}\Bigg]\\
   \end{align*}
   
 \end{frame}
@@ -1319,38 +1328,58 @@
 
 \begin{frame}[fragile]
   \frametitle{Sequence prediction with RNN 1/2}
-  \begin{block}{Learning (toy) problem}
-    Learn a function \(f\) that, given a fix sized sequence of characters, predicts the most probable next one from an alphabet
+  \begin{block}{Learning problem}
+    Learn a function \(f\) that, given a fix sized sequence of measurements, predicts the most probable next one
 
-    \[f(\text{\textcolor{blue}{T h i s   c o u r}}) = \text{\textcolor{red}{s}}\]
-    \[f(\text{\textcolor{blue}{i s   a w e s o m}}) = \text{\textcolor{red}{e}}\]
+    \begin{center}
+      \begin{tikzpicture}
+        \begin{axis}[small, width=0.75\linewidth, height=0.25\linewidth, ylabel=Temperature (°C), xlabel=Time(s)]
+          \addplot[red,  only marks] coordinates{%
+            ( 0.0, -8.31 )
+            (  3600.0,  -7.98)
+            (  7200.0, -8.765)
+            ( 10800.0,   -8.9)
+            ( 14400.0,  -9.41)
+            ( 18000.0, -9.675)
+            ( 21600.0,  -9.29)
+            ( 25200.0,   -8.5)
+            ( 28800.0, -8.005)
+            ( 32400.0, -7.425)
+            ( 36000.0, -7.205)
+            ( 39600.0, -7.295)
+            ( 43200.0, -6.655)
+            ( 46800.0, -5.885)
+            ( 50400.0,  -5.76)
+            ( 54000.0,  -5.48)
+            ( 57600.0,   -5.3)
+            ( 61200.0,  -5.26)
+            ( 64800.0,  -5.12)
+            ( 68400.0,   -4.9)
+            ( 72000.0, -4.915)
+            ( 75600.0,  -4.82)
+            ( 79200.0,  -4.36)
+            ( 82800.0,   -4.5)
+            ( 86400.0,   -4.6)};          
+          \addplot[blue, only marks] coordinates {(90000, -4.395)};
+        \end{axis}
+      \end{tikzpicture}
+    \end{center}
+    
   \end{block}
-  \begin{block}{Tokenization}
-    Tokenization is the action of cutting input data into parts that can be embedded into a vector space.
-\begin{minted}[breaklines]{python3}
-text ="This course is awesome"
-text_set = sorted(set(text))
-[' ', 'T', 'a', 'c', 'e', 'h', 'i', 'm', 'o', 'r', 's', 'u', 'w']
-char2int = {ch: i for i, ch in enumerate(text_set)}
-{' ': 0, 'T': 1, 'a': 2, 'c': 3, 'e': 4, 'h': 5, 'i': 6, 'm': 7, 'o': 8, 'r': 9, 's': 10, 'u': 11, 'w': 12}
-\end{minted}
-  \end{block}
-
 \end{frame}
 
 \begin{frame}{Sequence prediction with RNN 2/2}
   \begin{itemize}
-  \item Classification problem on sequence, \(x_t=\) token
-    \[\mathbf{x}_{T+1} = f(\mathbf{\mathbf{x}_T, \ldots, \mathbf{x}_0})\]
-  \item By-product: Once we have \(p(\mathbf{x}_{T+1}|\mathbf{x}_T, \ldots,\mathbf{x}_0)\) we can sample random text
-    \[p(\mathbf{x}_{T+1}|\mathbf{x}_T, \ldots,\mathbf{x}_0) \sim \text{Multinomial}\]
+  \item Regression problem on sequence,
+    \[\mathbf{x}_{T+1} = f(\mathbf{x}_T, \ldots, \mathbf{x}_0)\]
+  \item Then for longer predictions:
+    \[\mathbf{x}_{T+2} = f(\hat{\mathbf{x}}_{T+1}, \ldots, \mathbf{x}_0)\]
   \end{itemize}
 
   \begin{work}
     \begin{itemize}
-    \item Implement a simple tokenizer in pytorch
-    \item Implement a RNN that learn to predict the next character of a sequence
-    \item Once trained, generate some sentences of varying size
+    \item Implement a RNN that learn to predict the next value of a sequence
+    \item Once trained, generate one day of prediction (24 hours)
     \end{itemize}
   \end{work}
   

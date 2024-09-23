@@ -2,7 +2,7 @@
  "refs"
  (lambda ()
    (LaTeX-add-bibitems
-    "zhang2021dive"
+    "zhang2023dive"
     "prince2023understanding"
     "pml1Book"
     "pml2Book"
