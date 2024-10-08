@@ -1385,6 +1385,153 @@
   
 \end{frame}
 
+\section{Attention Mechanisms}
+
+\subsection{Sequence of varying length}
+
+\begin{frame}{Sequence are not always of same lenght}
+  \begin{itemize}
+  \item Time series
+    \begin{center}
+      \begin{tikzpicture}
+        \begin{groupplot}[group style={group size=2 by 1}, samples=200,  ymin=-1.0, ymax=1.0, xmin=0, xmax=15, width=0.5\linewidth, height=0.25\linewidth]
+          \nextgroupplot[grid, very thick, footnotesize]
+          \addplot[red, domain=0:2] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=3:5.5] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=7:8] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=8.75:10] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[blue, domain=10:15, dashed] {sin(deg(x))*exp(-x/10)};
+          \nextgroupplot[grid, very thick, footnotesize]
+          \addplot[red, domain=1:2.5] {cos(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=4:5.75] {cos(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=6.5:7] {cos(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[red, domain=7.75:9.5] {cos(deg(x))*exp(-x/10) + 0.1*rnd};
+          \addplot[blue, domain=10:15, dashed] {sin(deg(x)+45)*exp(-x/10)};
+        \end{groupplot}
+      \end{tikzpicture}
+    \end{center}
+  \item Text data
+    \begin{center}
+      \Large
+      \textcolor{red}{This course is really} \textcolor{blue}{cool}\\
+      \textcolor{red}{Mathieu Fauvel course is really} \textcolor{blue}{cool} \\
+      \textcolor{red}{Supervised Learning unit is so} \textcolor{blue}{cool}
+    \end{center}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Idea from database query}
+  \begin{itemize}
+  \item Suppose a given data base made of \(m\) \emph{(key, value)}\footnote{  \emph{Ideas gathered from \href{https://d2l.ai/chapter_attention-mechanisms-and-transformers/index.html}{https://d2l.ai/}}}:
+    \[\mathcal{DB} \stackrel{\textrm{def}}{=} \big\{(\mathbf{k}_1, \mathbf{v}_1), \ldots, (\mathbf{k}_m, \mathbf{v}_m)\big\}\]
+
+  \item Exact match for query \(\mathbf{q} = \mathbf{k}_i\) return value \(\mathbf{v}_i\), i.e.,
+    \[f(\mathbf{q}) = \mathbf{v}_i\]
+
+  \item<2-> Approximate match for \(\mathbf{q}\): Linear combination of values for \emph{\textcolor{blue}{close}} keys
+  \end{itemize}
+
+  
+  \visible<3>{\centerline{How to compute/define \emph{\textcolor{blue}{close}} between \(\mathbf{q}\) and \(\mathbf{k}_i\) ?}}
+  
+\end{frame}
+
+\begin{frame}{Example with time}
+
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[domain=0:100, samples=1001, small, grid, ymin = -0.05, ymax=1, xmin=0, xmax=105, axis lines*=left,]
+        \addplot[red, thick] {exp(-(25-x)*(25-x)/100)};
+        \addplot[black, thick, samples at = {10, 30, 50, 55, 68, 85 ,90 ,100}, only marks] {exp(-(25-x)*(25-x)/100)};
+        \addplot[dashed, black , thick] coordinates {(25, 0) (25, 2)};
+        \node[above, right] at (25, 0) {\(t_q\)};
+      \end{axis}
+    \end{tikzpicture}
+  \end{center}
+  
+\end{frame}
+\subsection{Attention Score}
+
+\begin{frame}{Dot product attention}
+ 
+  \begin{columns}
+    \begin{column}[t]{0.5\linewidth}
+      \begin{itemize}
+      \item Scaled dot product
+        \[\alpha(\mathbf{q}, \mathbf{k}_i) = \dfrac{\exp(\mathbf{q}^\top \mathbf{k}_i / \sqrt{d})}{\sum_{j=1}^m \exp(\mathbf{q}^\top \mathbf{k}_j / \sqrt{d})}\]
+        \[f(\mathbf{q}) = \sum_{i=1}^m \alpha(\mathbf{q}, \mathbf{k}_i)\mathbf{v}_i\]
+      \item If missing values: sum over \(l<m\) !
+      \item Masked softmax:
+        \[\boldsymbol{\alpha} = \softmax\big(\mathbf{m}\otimes\mathbf{K}\mathbf{q}\big)\]
+        with \(\mathbf{m}_j=-\infty\) if key \(j\) is missing and \(0\) otherwise.       
+      \end{itemize}
+    \end{column}
+
+    \begin{column}[t]{0.5\linewidth}
+      \begin{itemize}
+      \item Time Series:
+        \begin{itemize}
+        \item \(t_i \rightarrow \mathbf{k}_i\)
+        \item \(\mathbf{x}_i \rightarrow \mathbf{v}_i\)
+        \item \(t \rightarrow \mathbf{q}\)
+        \end{itemize}
+      \item In practice
+        \begin{itemize}
+        \item Use embedding for \(t\)
+          \begin{align*}
+            t \mapsto  \mathbf{e} = & [\cos(2\pi \omega_1t),\ldots,\cos(2\pi \omega_Et),\\
+              & \sin(2\pi \omega_1t),\ldots,\sin(2\pi \omega_Et)]
+          \end{align*}
+          \item Then go trough linear layer
+            \[\mathbf{k}_i = \mathbf{W}_k\mathbf{e}_i\]
+            \[\mathbf{v}_i = \mathbf{W}_v\mathbf{x}_i\]
+        \end{itemize}
+      \end{itemize}
+      
+    \end{column}
+    
+  \end{columns}
+  
+\end{frame}
+
+
+
+\begin{frame}{MultiHeadAttention}
+  \begin{itemize}
+  \item Use several attention heads
+    \[f_h(\mathbf{q}) = \sum_{i=1}^m \alpha(\mathbf{q}_h, \mathbf{k}_{hi})\mathbf{v}_{hi}\]
+    and use an additional linear layer
+    \[f = \mathbf{W} 
+    \begin{bmatrix}
+      f_1\\
+      \vdots\\
+      f_H
+    \end{bmatrix}
+    \]
+ 
+\item Efficient implementation:
+  \[\mathbf{K} = \left[
+  \begin{array}{c|c|c}
+    \mathbf{E_1} & \ldots & \mathbf{E}_H
+  \end{array}
+  \right]
+  \left[
+  \begin{array}{c|c|c}
+    \mathbf{W}_{k1} & \ldots & \mathbf{W}_{kH}
+  \end{array}
+    \right]
+  \in \mathbb{R}^{B\times (EH)} \] 
+   \end{itemize}
+  
+  \begin{work}
+    Implement time series interpolation using \emph{Attention Mechanisms}.
+  \end{work}
+\end{frame}
+
+
+
+
 % \begin{frame}[fragile,allowframebreaks]{Bibliography}
 %   \printbibliography
 % \end{frame}
