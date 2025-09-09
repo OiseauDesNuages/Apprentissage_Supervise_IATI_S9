@@ -9,7 +9,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{capt-of}
-\usepackage{overlock}\usepackage[english]{babel}
+\usepackage{overlock}
+\usepackage[english]{babel}
 \usepackage{tikz, pgfplots}\usepackage{smartdiagram}
 \usetikzlibrary{arrows,shapes,positioning,mindmap,decorations.pathreplacing,backgrounds,overlay-beamer-styles,calc,3d,fit,matrix,graphs, arrows.meta}
 \usepgfplotslibrary{groupplots}
@@ -17,17 +18,13 @@
 \usepackage[outline]{contour} % glow around text
 \contourlength{1.4pt}
 \usepackage{listofitems}
-\usepackage[citestyle=verbose, backend=biber]{biblatex}\addbibresource{refs.bib}
+\usepackage[citestyle=alphabetic, backend=biber]{biblatex}\addbibresource{refs.bib}
 \usepackage[type={CC}, modifier={by-sa}, version={4.0},]{doclicense}
 \pgfplotsset{compat=1.17}
 \usepackage{minted}\usemintedstyle{emacs}\usepackage[]{tcolorbox}
 \newtcolorbox[auto counter]{work}[1][]{colback=black!5!white,colframe=black!50!white,fonttitle=\sffamily\bfseries,title=Work}
 \newtcolorbox[auto counter]{discussion}[1][]{colback=black!5!white,colframe=red!50!white,fonttitle=\sffamily\bfseries,title=Discussion}
-
-\hypersetup{
-  colorlinks = true
-}
-
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
 \AtBeginSection{%
   % \begin{frame}<beamer>[plain]
   %   \frametitle{Outline}
@@ -66,15 +63,21 @@
   \addtocounter{framenumber}{-1}
 }%
 
-\usetheme{default}
+\usetheme{metropolis}
+\metroset{progressbar=frametitle,titleformat=smallcaps,block=fill,sectionpage=simple,subsectionpage=simple}
 \usecolortheme[snowy]{owl}
-\setbeamertemplate{navigation symbols}{}{}
-\setbeamertemplate{footline}[frame number]
+% \setbeamertemplate{navigation symbols}{}{}
+% \setbeamertemplate{footline}[frame number]
 \setbeamertemplate{itemize item}{$\bullet$}
 \setbeamertemplate{itemize subitem}{$\star$}
-\setbeamercolor{block body}{parent=normal text,use=block title,bg=black!5,}
-\setbeamercolor{block title}{fg=black, bg=gray}
-\setbeamertemplate{blocks}[rounded][shadow=false,] 
+% \setbeamercolor{block body}{parent=normal text,use=block title,bg=black!5,}
+% \setbeamercolor{block title}{fg=black, bg=gray}
+% \setbeamertemplate{blocks}[rounded][shadow=false,]
+%\usepackage{arevmath}
+% \hypersetup{
+%   colorlinks = true
+% }
+
 
 \DeclareMathOperator{\softmax}{softmax}
 \DeclareMathOperator{\reshape}{reshape}
@@ -113,7 +116,7 @@
     \item [2008-2010] Post-doc position at INRIA - MISTIS Team
     \item [2010-2011] Assistant Professor Toulouse
     \item [2011-2018] Associate Professor at DYNAFOR \& INP, Toulouse
-    \item [Since 2018] Research (CRCN) at CESBIO, INRAe
+    \item [Since 2018] Research at CESBIO, INRAe
     \end{itemize}
   \item Research interests are:
     \begin{center}
@@ -128,7 +131,7 @@
   \item Learn modern supervised machine learning 
   \item Understand how each step works
     \begin{itemize}
-    \item Data préparation
+    \item Data preparation
     \item Model definition
     \item Optimization step
     \end{itemize}
@@ -142,8 +145,8 @@
   \begin{columns}[c]
     \begin{column}{0.5\linewidth}
       \begin{itemize}
-      \item <1-> \textbf{Artificial Intelligence}
-        \centerline{\em Perform human tasks using computers and algorithms}
+      \item <1-> \textbf{Artificial Intelligence} %
+        \centerline{\em Perform human tasks using computers and algorithms} %
       \item <2-> \cite{mitchelllearning}:
         \begin{center}
           \emph{Machine Learning is defined as the capacity of a computer program to improve its performance measure with observations}
@@ -202,15 +205,15 @@
   \frametitle{Online References}
 
   \begin{itemize}
-  \item \cite{zhang2023dive}
+  \item \fullcite{zhang2023dive}
     
-  \item \cite{prince2023understanding}
+  \item \fullcite{prince2023understanding}
 
-  \item \cite{mlbook2022}
+  \item \fullcite{mlbook2022}
 
-  \item \cite{pml1Book}
+  \item \fullcite{pml1Book}
 
-  \item \cite{pml2Book}
+  \item \fullcite{pml2Book}
   \end{itemize}
   
 \end{frame}
@@ -224,9 +227,9 @@
 \subsection{Linear model for regression}
 
 \begin{frame}[fragile]
-  \frametitle{Univariate linear model}
+  \frametitle{Univariate linear model 1/2}
   \begin{columns}
-    \begin{column}{0.5\linewidth}
+    \begin{column}{0.45\linewidth}
       \begin{itemize}
       \item  \(f(x) = wx +b\)  and \(\boldsymbol{\theta} = (w,b)\)     
       \item Loss function: \(\ell \big(f(x_i),y_i\big) = \big(f(x_i) - y_i\big)^2\)
@@ -238,19 +241,71 @@
         \end{align*}
       \end{itemize}
     \end{column}
-    \begin{column}<2>{0.5\linewidth}
-      \begin{work}
-        Implement the 1D regression in pytorch of the following function:
-        \[f(x)=2x-1\]
+    \begin{column}<2>{0.55\linewidth}
+\begin{minted}[fontsize=\footnotesize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{python}
+class LinearModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear_layer = nn.Linear(1, 1, bias=True)
 
-        Do the notebook:
+    def forward(self, X):
+        return self.linear_layer(X)
 
-        \begin{center}
-          \textcolor{orange}{regression\_1d\_toy.ipynb}
-        \end{center}
-      \end{work}
+\end{minted}
+
+\begin{minted}[fontsize=\footnotesize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{ipython}
+# Create model and print initial values
+model = LinearModel()
+
+print(model.linear_layer.weight)
+Parameter containing:
+tensor([[0.0382]], requires_grad=True)
+
+print(model.linear_layer.bias)
+Parameter containing:
+tensor([0.2317], requires_grad=True)
+\end{minted}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Univariate linear model 1/2}
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+\begin{minted}[fontsize=\footnotesize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{ipython3}
+loss_fn = nn.MSELoss()
+n_epochs, loss_val = 100, []
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
+
+model.train()
+for epoch in range(n_epochs):
+    # Forward pass
+    y_hat = model(x_train)
+    # Compute objective
+    loss = loss_fn(y_train, y_hat)
+    loss_val.append(loss.item())
+    # Backpropagation
+    loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+\end{minted}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+\begin{minted}[fontsize=\footnotesize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{ipython3}
+# Optimal value
+print(model.linear_layer.weight)
+Parameter containing:
+tensor([[1.7242]], requires_grad=True)
+
+print(model.linear_layer.bias)
+Parameter containing:
+tensor([0.3730], requires_grad=True)
+\end{minted}
+      \centerline{\includegraphics[width=\linewidth]{figures/toy_1D.pdf}}
+    \end{column}
+  \end{columns}
+  
 \end{frame}
 
 \begin{frame}[fragile]
@@ -262,15 +317,13 @@
         
       \item Same loss and objective function and so same gradient updates \ldots
       \item<2-> We can use other loss function
-
         \begin{center}
           \begin{tikzpicture}
-            \begin{axis}[domain=-3:3, samples=200, grid, very thick, footnotesize, ymin=0, ymax=4.5, xmin=-3,xmax=3, legend pos=outer north east, legend cell align=left]
+            \begin{axis}[domain=-3:3, samples=200, grid, very thick, scriptsize, ymin=0, ymax=4.5, xmin=-3,xmax=3, legend pos=outer north east, legend cell align=left,]
               \addplot[orange] {0.5*x*x};
               \addplot[blue] {abs(x)};
               \addplot[dashed, green] {abs(x) <= 1 ? 0.5*x^2 : (abs(x) - 0.5)};
               \addplot[purple] {1-exp(-x*x)};
-              % \legend{$\ell(f(\mathbf{x}_i), y_i)= (f(\mathbf{x}_i), y_i)^2$, $\ell(f(\mathbf{x}_i)- y_i)= |f(\mathbf{x}_i)- y_i|$}
               \legend{\((f(\mathbf{x}_i)-y_i)^2\), \(|f(\mathbf{x}_i)-y_i|\), H(\(f(\mathbf{x}_i)-y_i\)), \(1-\exp((f(\mathbf{x}_i) - y_i)^2)\)}
             \end{axis}
           \end{tikzpicture}
@@ -293,7 +346,7 @@
         \item Prepare (train/validation) data
         \item Define a multi. linear model
         \item Optimize your hyperparemeters (batch size, learning rate)
-        \item Switch L2 to other loss function
+        \item Switch from L2 to other loss function
         \end{itemize}
       \end{work}
     \end{column}

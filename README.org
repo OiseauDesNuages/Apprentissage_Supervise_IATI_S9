@@ -42,28 +42,28 @@ git pull origin main
 * Course organization
 | Days                | Start | End   | Duration | Name                                      | Teacher        | Room |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mardi 24/09/2024    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
-| Mardi 24/09/2024    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Lundi 22/09/2025    | 14h00 | 15h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Lundi 22/09/2025    | 16h15 | 18h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mardi 01/10/2024    | 14h00 | 15h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
-| Mardi 01/10/2024    | 16h15 | 18h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Mercredi 01/10/2025 | 14h00 | 15h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C302 |
+| Mercredi 01/10/2025 | 16h15 | 18h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C302 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mardi 08/10/2024    | 14h00 | 15h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
-| Mardi 08/10/2024    | 16h15 | 18h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Mardi 07/10/2025    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Mardi 07/10/2025    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mardi 15/10/2024    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
-| Mardi 15/10/2024    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Mardi 14/10/2025    | 08h00 | 09h45 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
+| Mardi 14/10/2025    | 10h15 | 12h00 | 01h45    | N9EE41C - CM - Apprentissage supervisé    | Fauvel Mathieu | C304 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mercredi 16/10/2024 | 14h00 | 15h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C301 |
+| Lundi 17/11/2025    | 08h00 | 09h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C302 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Lundi 21/10/2024    | 10h00 | 11h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C306 |
-| Lundi 21/10/2024    | 16h15 | 18h00 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C301 |
+| Lundi 21/10/2025    | 10h00 | 11h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C306 |
+| Lundi 21/10/2025    | 16h15 | 18h00 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C301 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Lundi 18/11/2024    | 08h00 | 09h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C302 |
+| Lundi 18/11/2025    | 08h00 | 09h45 | 01h45    | N9EE41C - PERSO - Apprentissage supervisé |                | C302 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Mardi 19/11/2024    | 08h00 | 9h45  | 01h45    | N9EE41C - TP - Apprentissage supervisé    | Fauvel Mathieu | C306 |
+| Mardi 19/11/2025    | 08h00 | 9h45  | 01h45    | N9EE41C - TP - Apprentissage supervisé    | Fauvel Mathieu | C306 |
 |---------------------+-------+-------+----------+-------------------------------------------+----------------+------|
-| Lundi 25/11/2024    | 14h00 | 15h00 | 01h00    | N9EE41C - EXAM - Apprentissage supervisé  | Fauvel Mathieu | C306 |
+| Lundi 25/11/2025    | 14h00 | 15h00 | 01h00    | N9EE41C - EXAM - Apprentissage supervisé  | Fauvel Mathieu | C306 |
 
 The evaluation will be
 - Home Labwork: 40%, by pair.
