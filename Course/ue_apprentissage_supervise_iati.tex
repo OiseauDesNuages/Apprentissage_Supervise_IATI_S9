@@ -25,43 +25,6 @@
 \newtcolorbox[auto counter]{work}[1][]{colback=black!5!white,colframe=black!50!white,fonttitle=\sffamily\bfseries,title=Work}
 \newtcolorbox[auto counter]{discussion}[1][]{colback=black!5!white,colframe=red!50!white,fonttitle=\sffamily\bfseries,title=Discussion}
 \definecolor{bg}{rgb}{0.95,0.95,0.95}
-\AtBeginSection{%
-  % \begin{frame}<beamer>[plain]
-  %   \frametitle{Outline}
-  %   \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
-  % \end{frame}
-  \begin{frame}<beamer>[plain]
-    \frametitle{Outline}
-    \begin{columns}[onlytextwidth,T]
-        \begin{column}{.45\textwidth}
-            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=1-4]
-        \end{column}
-        \begin{column}{.45\textwidth}
-            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=5-6]
-        \end{column}
-    \end{columns}
-\end{frame}
-  \addtocounter{framenumber}{-1}
-}%
-
-\AtBeginSubsection{%
-  % \begin{frame}<beamer>[plain]
-  %   \frametitle{Outline}
-  %   \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded]
-  % \end{frame}
-  \begin{frame}<beamer>[plain]
-    \frametitle{Outline}
-    \begin{columns}[onlytextwidth,T]
-        \begin{column}{.45\textwidth}
-            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=1-4]
-        \end{column}
-        \begin{column}{.45\textwidth}
-            \tableofcontents[sectionstyle=show/shaded,subsectionstyle=show/shaded, sections=5-6]
-        \end{column}
-    \end{columns}
-\end{frame}
-  \addtocounter{framenumber}{-1}
-}%
 
 \usetheme{metropolis}
 \metroset{progressbar=frametitle,titleformat=smallcaps,block=fill,sectionpage=simple,subsectionpage=simple}
@@ -315,11 +278,11 @@ tensor([0.3730], requires_grad=True)
       \begin{itemize}
       \item \(f(\mathbf{x}) = \mathbf{w}^\top\mathbf{x} + b\) and \(\boldsymbol{\theta} = (\mathbf{w}, b)\)
         
-      \item Same loss and objective function and so same gradient updates \ldots
+      \item Same objective function and  gradient updates \ldots
       \item<2-> We can use other loss function
         \begin{center}
           \begin{tikzpicture}
-            \begin{axis}[domain=-3:3, samples=200, grid, very thick, scriptsize, ymin=0, ymax=4.5, xmin=-3,xmax=3, legend pos=outer north east, legend cell align=left,]
+            \begin{axis}[domain=-3:3, samples=200, grid, very thick,  footnotesize, width=0.75\linewidth, ymin=0, ymax=4.5, xmin=-3,xmax=3, legend pos=outer north east, legend cell align=left,]
               \addplot[orange] {0.5*x*x};
               \addplot[blue] {abs(x)};
               \addplot[dashed, green] {abs(x) <= 1 ? 0.5*x^2 : (abs(x) - 0.5)};
@@ -468,7 +431,6 @@ tensor([0.3730], requires_grad=True)
         \begin{itemize}
         \item All \(\mathbf{z}_{ic}\) are small ?
         \item One \(\mathbf{z}_{ic}\) is very large ?
-        \item All \(\mathbf{z}_{ic}\) are very large ?
         \end{itemize}
       \end{discussion}
     \end{column}
@@ -497,11 +459,12 @@ tensor([0.3730], requires_grad=True)
     \begin{column}{0.5\linewidth}
       \begin{work}
         Implement a linear classifier in pytorch for the classification of \href{https://github.com/zalandoresearch/fashion-mnist}{Fashion MNIST} data set.
-        \begin{itemize}
-          \item Monitor 
-        \end{itemize}
       \end{work}
-      
+      \only<2>{
+        \begin{discussion}
+          Could we increase the classifier accuracy if we add another linear layer ?
+        \end{discussion}
+      }
     \end{column}
   \end{columns}
 \end{frame}
@@ -564,7 +527,7 @@ tensor([0.3730], requires_grad=True)
 
 
   \begin{columns}
-    \begin{column}{0.5\linewidth}
+    \begin{column}{0.6\linewidth}
       \begin{itemize}
       \item \(\mathbf{x}^{(1)} = \sigma\Big(\mathbf{W}^{(0)}\mathbf{x}^{(0)}+\mathbf{b}^{(0)}\Big)\)
       \item \(\mathbf{x}^{(2)} = \sigma\Big(\mathbf{W}^{(1)}\mathbf{x}^{(1)}+\mathbf{b}^{(1)}\Big)\)
@@ -577,13 +540,13 @@ tensor([0.3730], requires_grad=True)
           \begin{itemize}
           \item Why the last layer does not have non-linearity ?
           \item For an univariate regression problem, shows that a 2-layers MLP is a piece-wise linear function.
-          \item Implement an MLP classifier for Fashion MNIST data set
+          \item Implement an MLP classifier for Fashion MNIST data set and increase the number of layers progressively.
           \end{itemize}
         \end{work}
       }
     \end{column}
     
-    \begin{column}{0.5\linewidth}
+    \begin{column}{0.4\linewidth}
       \resizebox{\linewidth}{!}{\begin{tikzpicture}[x=2.7cm,y=1.6cm]
           \message{^^JNeural network activation}
           \def\NI{5} % number of nodes in input layers
@@ -691,6 +654,7 @@ tensor([0.3730], requires_grad=True)
           \addplot[red, very thick] table[x=iter, y=train_loss, col sep=comma] {figures/overfitting.csv};
           \addplot[blue, very thick] table[x=iter, y=val_loss, col sep=comma] {figures/overfitting.csv};
           \addplot[orange, <->, thick] coordinates {(95,0.05) (95,0.75)} [sloped, font=\small] node[above, pos=0.5] {Gap};
+          \legend{Train, Valid}
         \end{axis}
       \end{tikzpicture}
     \end{center}
@@ -797,11 +761,6 @@ tensor([0.3730], requires_grad=True)
             };
           \end{tikzpicture}
         \end{center}
-      }
-      \visible<4>{
-        \begin{work}
-          Show that 2D convolution can be expressed as a linear layer.
-        \end{work}
       }
     \end{column}
   \end{columns}
@@ -967,7 +926,7 @@ tensor([0.3730], requires_grad=True)
       \item Combine pixel across channels - no spatial operation
       \item Matrix product / linear layer in the channel dimension
     \begin{align*}
-      \mathbf{X}^{(h+1)} = \reshape\bigg\{\sigma\big(\mathbf{K}^{(h)}\reshape\big\{\mathbf{X}^{(h)}, C_{(h)}, H^{(h)}W^{(h)}\big\}+\mathbf{b}^{(h)}\big), C_{(h+1)}, H^{(h)},W^{(h)}\bigg\}
+      \mathbf{X}^{(h+1)} = \reshape\bigg\{\big(\mathbf{K}^{(h)}\reshape\big\{\mathbf{X}^{(h)}, C_{(h)}, H^{(h)}W^{(h)}\big\}+\mathbf{b}^{(h)}\big), C_{(h+1)}, H^{(h)},W^{(h)}\bigg\}
     \end{align*}
     with \(\reshape\big\{\mathbf{X}^{(h)}, C_{(h)}, H^{(h)}W^{(h)}\big\}\in\mathbb{R}^{C_{(h)}\times H^{(h)}W^{(h)}}\)
       
@@ -1011,7 +970,7 @@ tensor([0.3730], requires_grad=True)
   \begin{frame}{2D CNN}
     \begin{discussion}
       \begin{itemize}
-      \item Show that the successive convolution with two kernels is equivalent to one convolution.
+      \item Show that the successive convolution with two kernels is equivalent to one convolution with larger kernel.
       \item What stride size would you use for a max pooling with a kernel of size \(2 \times 2\)?
       \end{itemize}
     \end{discussion}
@@ -1038,13 +997,9 @@ tensor([0.3730], requires_grad=True)
       \begin{discussion}
         \begin{itemize}
         \item What happen if the batch size is one ?
-        \item What happen if the batch size is small ?
         \item What should we do in \emph{prediction} mode ?
         \end{itemize}
       \end{discussion}
-      \begin{work}
-        Add normalization layer (2D) to your model.
-      \end{work}
     }
   \end{frame}
 
@@ -1061,36 +1016,37 @@ tensor([0.3730], requires_grad=True)
   
   \begin{center}
     \begin{tabular}{c@{~}c@{~}c@{~}c@{~}c}
-      \includegraphics[width=0.2\linewidth]{figures/data_augment_0.pdf}&         \includegraphics[width=0.2\linewidth]{figures/data_augment_1.pdf}&        \includegraphics[width=0.2\linewidth]{figures/data_augment_2.pdf}&        \includegraphics[width=0.2\linewidth]{figures/data_augment_3.pdf}&        \includegraphics[width=0.2\linewidth]{figures/data_augment_4.pdf}
+      \includegraphics[width=0.18\linewidth]{figures/data_augment_0.pdf}&         \includegraphics[width=0.18\linewidth]{figures/data_augment_1.pdf}&        \includegraphics[width=0.18\linewidth]{figures/data_augment_2.pdf}&        \includegraphics[width=0.18\linewidth]{figures/data_augment_3.pdf}&        \includegraphics[width=0.18\linewidth]{figures/data_augment_4.pdf}
     \end{tabular}
   \end{center}
  
     \begin{work}
-      Implement data augmentation with Pytorch for the training data only.
+      Implement data augmentation with Pytorch (for the training data only). Use normalization layer.
     \end{work}
   \end{frame}
 
   \begin{frame}
     \frametitle{Residual Network}
     \begin{itemize}
-    \item Deep Neural Network: \(f_h(\mathbf{x}^{(h)}) := f_h(\mathbf{x}^{(h)}, \theta_h)\)
+    \item Deep Neural Network: 
       \[f(\mathbf{x}) = f_H\circ f_{H-1}\circ \ldots \circ f_0(\mathbf{x})\]
-\only<2>{\item Let \(f_h = g_2\circ g_1\circ g_0\)
+      \[f_h(\mathbf{x}^{(h)}) := f_h(\mathbf{x}^{(h)}, \theta_h)\]
+\only<2>{\item Let \(f = g_2\circ g_1\circ g_0\)
       \begin{center}
         \begin{tikzpicture}
           \node (x) at (0,0) {\(\mathbf{x}\)};
           \node[right= of x] (x1) {\(\mathbf{x}^{(1)}\)};
           \node[right= of x1] (x2) {\(\mathbf{x}^{(2)}\)};
-          \node[right= of x2] (y) {\(f_h(\mathbf{x})\)};
+          \node[right= of x2] (y) {\(f(\mathbf{x})\)};
           \path [->] (x) edge node[above] {$g_0$} (x1);
           \path [->] (x1) edge node[above] {$g_1$} (x2);
           \path [->] (x2) edge node[above] {$g_2$} (y);
         \end{tikzpicture}
       \end{center}
       \begin{align*}
-        \dfrac{\partial f_h(\mathbf{x})}{\partial \theta_0} = \underrightarrow{\dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\theta_0}(\mathbf{x})} \qquad         \dfrac{\partial g(\mathbf{x})}{\partial \theta_1} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{\theta_1}(\mathbf{x}^{(1)}) \qquad  \dfrac{\partial g(\mathbf{x})}{\partial \theta_2} = \dfrac{g_2}{\alpha_2}(\mathbf{x}^{(2)})
+        \dfrac{\partial f(\mathbf{x})}{\partial \theta_0} = \underrightarrow{\dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\theta_0}(\mathbf{x})} \qquad         \dfrac{\partial f(\mathbf{x})}{\partial \theta_1} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{\theta_1}(\mathbf{x}^{(1)}) \qquad  \dfrac{\partial f(\mathbf{x})}{\partial \theta_2} = \dfrac{g_2}{\alpha_2}(\mathbf{x}^{(2)})
       \end{align*}}
-  \only<3>{\item Let \(f_h = g_2\circ g_1\circ g_0\) with \emph{residual connection}
+  \only<3>{\item Let \(f = g_2\circ g_1\circ g_0\) with \emph{residual connection}
       \begin{center}
     \begin{tikzpicture}
       \node (x) at (0,0) {\(\mathbf{x}\)};
@@ -1101,7 +1057,7 @@ tensor([0.3730], requires_grad=True)
       \node[right= 0.25cm of p2] (x2) {\(\mathbf{x}^{(2)}\)};
 
       \node[right= of x2] (p3) {\(\oplus\)};
-      \node[right= 0.25cm of p3] (y) {\(f_h(\mathbf{x})\)};
+      \node[right= 0.25cm of p3] (y) {\(f(\mathbf{x})\)};
       % \node[right= of x2] (y) {\(y\)};
       
       
@@ -1121,7 +1077,7 @@ tensor([0.3730], requires_grad=True)
     \end{tikzpicture}
   \end{center}
   \begin{align*}
-    \dfrac{\partial f_h(\mathbf{x})}{\partial \alpha_0} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_0}{\alpha_0}(\mathbf{x}) 
+    \dfrac{\partial f(\mathbf{x})}{\partial \alpha_0} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_0}{\alpha_0}(\mathbf{x}) 
   \end{align*}
   \begin{itemize}
   \item Improve gradient propagation
@@ -1136,307 +1092,330 @@ tensor([0.3730], requires_grad=True)
 }
 \end{frame}
 
-\section{Recurrent Neural Networks}
-
-\subsection{When order matters}
+\section{U-Net}
 \begin{frame}
-  \frametitle{Sequential data}
+  \frametitle{Architecture}
 
-  \begin{itemize}
-  \item Time series
-    \begin{center}
-      \begin{tikzpicture}
-        \begin{axis}[domain=0:10, samples=200, grid, very thick, footnotesize, ymin=-1.0, ymax=1.0, xmin=0, xmax=15, width=0.5\linewidth, height=0.25\linewidth]
-          \addplot[red] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
-          \addplot[blue, domain=10:15, dashed] {sin(deg(x))*exp(-x/10)};
-        \end{axis}
-      \end{tikzpicture}
-    \end{center}
-  \item Text data
-    \begin{center}
-      \Large
-      \textcolor{red}{This course is really} \textcolor{blue}{cool}
-    \end{center}
-  \end{itemize}
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+      \begin{itemize}
+      \item Encoder - Decoder
+      \item Skip connection
+      \item Multi-scale analysis
+      \item Initially propose for segmentation
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \begin{center}
+        \includegraphics[width=0.95\linewidth]{figures/unet.png}
+      \end{center}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 
-\begin{frame}{Auto-regressive model}
-  \begin{itemize}
-  \item Autogressive models: \(p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)\)
-  \item Sequence model:
-    \[p(\mathbf{x}_T , \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)p(\mathbf{x}_1) \]
-  \item Markov model:
-    \[p(\mathbf{x}_T | \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t |\mathbf{x}_{t-1}) p(\mathbf{x}_1)\]
-  \item <2> Example: \(p(\mathbf{x}_t |\mathbf{x}_{t-1})\) could model
-    \begin{itemize}
-    \item The probability to get letter after a observing a specific letter (or a set of)
-    \item The expected value of a signal given past values of the same signal
-    \end{itemize}
-    
-  \end{itemize}
-  
-\end{frame}
 
+% \section{Recurrent Neural Networks}
+
+% \subsection{When order matters}
 % \begin{frame}
-%   \frametitle{Main sequence models}
-%   \begin{center}
-%     \begin{tikzpicture}[=>latex]
-%       \node (x0) [] {\(x_0\)};
-%       \node (x1) [right of=x0] {\(x_1\)};
-%       \node (x2) [right of=x1] {\(x_2\)};     
-%       \node (h0) [above of=x0] {\(h_0\)};
-%       \node (h1) [right of=h0] {\(h_1\)};
-%       \node (h2) [right of=h1] {\(h_2\)};
-%       \node (o) [above of=h0] {\(o\)};
-%     \end{tikzpicture}
-%   \end{center}
+%   \frametitle{Sequential data}
+
+%   \begin{itemize}
+%   \item Time series
+%     \begin{center}
+%       \begin{tikzpicture}
+%         \begin{axis}[domain=0:10, samples=200, grid, very thick, footnotesize, ymin=-1.0, ymax=1.0, xmin=0, xmax=15, width=0.5\linewidth, height=0.25\linewidth]
+%           \addplot[red] {sin(deg(x))*exp(-x/10) + 0.1*rnd};
+%           \addplot[blue, domain=10:15, dashed] {sin(deg(x))*exp(-x/10)};
+%         \end{axis}
+%       \end{tikzpicture}
+%     \end{center}
+%   \item Text data
+%     \begin{center}
+%       \Large
+%       \textcolor{red}{This course is really} \textcolor{blue}{cool}
+%     \end{center}
+%   \end{itemize}
 % \end{frame}
 
 
-\begin{frame}{Latent autoregressive model}
-  \begin{columns}
-    \begin{column}{0.55\linewidth}
-      \begin{center}
-        \begin{tikzpicture}[=>latex, node distance=2cm]
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x0) [ ] {\(\mathbf{x}_{t-1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x1) [right of=x0] {\(\mathbf{x}_{t}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x2) [right of=x1] {\(\mathbf{x}_{t+1}\)};     
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h0) [above of=x0] {\(\mathbf{h}_{t-1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h1) [right of=h0] {\(\mathbf{h}_{t}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h2) [right of=h1] {\(\mathbf{h}_{t+1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o0) [above of=h0] {\(\hat{\mathbf{y}}_{t-1}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o1) [right of=o0] {\(\hat{\mathbf{y}}_{t}\)};
-          \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o2) [right of=o1] {\(\hat{\mathbf{y}}_{t+1}\)};
-
-          \node[] (hp) [left of=h0] {};
-          \node[] (hf) [right of=h2] {};
-          
-          \draw[->] (h0)--(h1);
-          \draw[->] (h1)--(h2);
-          \draw[->] (x0)--(h0);
-          \draw[->] (x1)--(h1);
-          \draw[->] (x2)--(h2);
-          \draw[->] (h0)--(o0);
-          \draw[->] (h1)--(o1);
-          \draw[->] (h2)--(o2);
-          \draw[->, dashed] (hp)--(h0);
-          \draw[->, dashed] (h2)--(hf);
-        \end{tikzpicture}
-      \end{center}
-    \end{column}
-    \begin{column}{0.5\linewidth}
-      \begin{itemize}
-      \item \(\mathbf{h}_t = f(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \sigma_{h}\big(\mathbf{W}_{hx}\mathbf{x}_{t} + \mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{b}_h\big)\)
-      \item \(\hat{\mathbf{y}}_t = g(\mathbf{h}_{t}) = \sigma_{o}\big(\mathbf{W}_{oh}\mathbf{h}_t+\mathbf{b}_o\big)\)
-      \item Backpropagation through time - BPTT
-        \[\ell = \frac{1}{T}\sum_{t=1}^T\ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})\]
-        with \(\mathbf{h}_{0}= \mathbf{0}\)
-      \end{itemize}
-      
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Issue with BPTT}
-  \begin{align*}
-    \frac{\partial \ell}{\partial \mathbf{W}_{hh}} =&    \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial \mathbf{W}_{hh}} \\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial{\hat{\mathbf{y}}}_{t}}{\partial \mathbf{W}_{hh}} \\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} + \frac{f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial\mathbf{h}_{t-1}}\frac{\partial \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\bigg]\\
-    =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\Bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} +  \textcolor{blue}{ \sum_{p=1}^{t-1}\bigg(\prod_{q=p+1}^{t} \frac{\partial f(\mathbf{x}_{q}, \mathbf{h}_{q-1})}{\partial \mathbf{h}_{q-1}} \bigg) \frac{\partial f(\mathbf{x}_{p}, \mathbf{h}_{p-1})}{\partial \mathbf{W}_{hh}}}\Bigg]\\
-  \end{align*}
-  
-\end{frame}
-
-\subsection{Modern RNN}
-
-\begin{frame}[fragile]
-  \frametitle{Long Short Term Memory  (LSTM)}
-  \begin{columns}
-    \begin{column}{0.65\linewidth}
-      \newcommand{\empt}[2]{$\mathbf{#1}^{(#2)}$}
-      
-      \begin{tikzpicture}[
-        % GLOBAL CFG
-        font=\sf \scriptsize,
-        >=LaTeX,
-        % Styles
-        cell/.style={% For the main box
-          rectangle, 
-          rounded corners=5mm, 
-          draw,
-          very thick,
-        },
-        operator/.style={%For operators like +  and  x
-          circle,
-          draw,
-          inner sep=-0.5pt,
-          minimum height =.5cm,
-        },
-        function/.style={%For functions
-          ellipse,
-          draw,
-          inner sep=1pt
-        },
-        ct/.style={% For external inputs and outputs
-          circle,
-          draw,
-          line width = .75pt,
-          minimum width=1cm,
-          inner sep=1pt,
-        },
-        gt/.style={% For internal inputs
-          rectangle,
-          draw,
-          minimum width=4mm,
-          minimum height=3mm,
-          inner sep=1pt
-        },
-        mylabel/.style={% something new that I have learned
-          font=\scriptsize\sffamily
-        },
-        ArrowC1/.style={% Arrows with rounded corners
-          rounded corners=.25cm,
-          thick,
-        },
-        ArrowC2/.style={% Arrows with big rounded corners
-          rounded corners=.5cm,
-          thick,
-        },
-        ]
-
-        % Start drawing the thing...    
-        % Draw the cell: 
-        \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
-
-        % Draw inputs named ibox#
-        \node [gt, label={[mylabel, shift={(0,0.25)}]left:\(\mathbf{F}_t\)}] (ibox1) at (-2,-0.75) {$\sigma$};
-        \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{I}_t\)}] (ibox2) at (-1.5,-0.75) {$\sigma$};
-        \node [gt, minimum width=1cm, label={[mylabel, shift={(-0.125,0.25)}]right:\(\tilde{\mathbf{C}}_t\)}] (ibox3) at (-0.5,-0.75) {$\tanh$};
-        \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{O}_t\)}] (ibox4) at (0.5,-0.75) {$\sigma$};
-
-        % Draw opérators   named mux# , add# and func#
-        \node [operator] (mux1) at (-2,1.5) {$\times$};
-        \node [operator] (add1) at (-0.5,1.5) {+};
-        \node [operator] (mux2) at (-0.5,0) {$\times$};
-        \node [operator] (mux3) at (1.5,0) {$\times$};
-        \node [function] (func1) at (1.5,0.75) {$\tanh$};
-
-        % Draw External inputs? named as basis c,h,x
-        \node[ct] (c) at (-4,1.5) {\empt{c}{t-1}};
-        \node[ct] (h) at (-4,-1.5) {\empt{h}{t-1}};
-        \node[ct] (x) at (-2.5,-3) {\empt{x}{t}};
-
-        % Draw External outputs? named as basis c2,h2,x2
-        \node[ct] (c2) at (4,1.5) {\empt{c}{t}};
-        \node[ct] (h2) at (4,-1.5) {\empt{h}{t}};
-        % \node[ct, label={[mylabel]left:Label3}] (x2) at (2.5,3) {\empt{h}{t}};
-
-        % Start connecting all.
-        % Intersections and displacements are used. 
-        % Drawing arrows    
-        \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
-
-        % Inputs
-        \draw [ArrowC2] (h) -| (ibox4);
-        \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
-        \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
-        \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
-        \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
-
-        % Internal
-        \draw [->, ArrowC2] (ibox1) -- (mux1);
-        \draw [->, ArrowC2] (ibox2) |- (mux2);
-        \draw [->, ArrowC2] (ibox3) -- (mux2);
-        \draw [->, ArrowC2] (ibox4) |- (mux3);
-        \draw [->, ArrowC2] (mux2) -- (add1);
-        \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
-        \draw [->, ArrowC2] (func1) -- (mux3);
-
-        % Outputs
-        \draw [-, ArrowC2] (mux3) |- (h2);
-        % \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
-        % \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
-        % \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
-
-      \end{tikzpicture}
-    \end{column}
-    \begin{column}{0.375\linewidth}
-      \begin{itemize}
-      \item Forget gate
-        \[\mathbf{F}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{fh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{fx}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_f\Big)\]
-      \item Input gate
-        \[\mathbf{I}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{ih}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ix}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_i\Big)\]
-      \item Input node
-        \[\tilde{\mathbf{C}}_t = \tanh\Big(\textcolor{blue}{\mathbf{W}}_{\tilde{c}h}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{\tilde{c}x}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_{\tilde{c}}\Big)\]
-      \item Output gate
-        \[\mathbf{O}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{oh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ox}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_o\Big)\]
-      \end{itemize}
-    \end{column}
-  \end{columns}
-
-  {\small Good overview of LSTM: \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{Sequence prediction with RNN 1/2}
-  \begin{block}{Learning problem}
-    Learn a function \(f\) that, given a fix sized sequence of measurements, predicts the most probable next one
-
-    \begin{center}
-      \begin{tikzpicture}
-        \begin{axis}[small, width=0.75\linewidth, height=0.25\linewidth, ylabel=Temperature (°C), xlabel=Time(s)]
-          \addplot[red,  only marks] coordinates{%
-            ( 0.0, -8.31 )
-            (  3600.0,  -7.98)
-            (  7200.0, -8.765)
-            ( 10800.0,   -8.9)
-            ( 14400.0,  -9.41)
-            ( 18000.0, -9.675)
-            ( 21600.0,  -9.29)
-            ( 25200.0,   -8.5)
-            ( 28800.0, -8.005)
-            ( 32400.0, -7.425)
-            ( 36000.0, -7.205)
-            ( 39600.0, -7.295)
-            ( 43200.0, -6.655)
-            ( 46800.0, -5.885)
-            ( 50400.0,  -5.76)
-            ( 54000.0,  -5.48)
-            ( 57600.0,   -5.3)
-            ( 61200.0,  -5.26)
-            ( 64800.0,  -5.12)
-            ( 68400.0,   -4.9)
-            ( 72000.0, -4.915)
-            ( 75600.0,  -4.82)
-            ( 79200.0,  -4.36)
-            ( 82800.0,   -4.5)
-            ( 86400.0,   -4.6)};          
-          \addplot[blue, only marks] coordinates {(90000, -4.395)};
-        \end{axis}
-      \end{tikzpicture}
-    \end{center}
+% \begin{frame}{Auto-regressive model}
+%   \begin{itemize}
+%   \item Autogressive models: \(p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)\)
+%   \item Sequence model:
+%     \[p(\mathbf{x}_T , \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t | \mathbf{x}_{t-1}, \ldots, \mathbf{x}_1)p(\mathbf{x}_1) \]
+%   \item Markov model:
+%     \[p(\mathbf{x}_T | \mathbf{x}_{T-1}, \ldots, \mathbf{x}_1) = \prod_{t=2}^{T}p(\mathbf{x}_t |\mathbf{x}_{t-1}) p(\mathbf{x}_1)\]
+%   \item <2> Example: \(p(\mathbf{x}_t |\mathbf{x}_{t-1})\) could model
+%     \begin{itemize}
+%     \item The probability to get letter after a observing a specific letter (or a set of)
+%     \item The expected value of a signal given past values of the same signal
+%     \end{itemize}
     
-  \end{block}
-\end{frame}
-
-\begin{frame}{Sequence prediction with RNN 2/2}
-  \begin{itemize}
-  \item Regression problem on sequence,
-    \[\mathbf{x}_{T+1} = f(\mathbf{x}_T, \ldots, \mathbf{x}_0)\]
-  \item Then for longer predictions:
-    \[\mathbf{x}_{T+2} = f(\hat{\mathbf{x}}_{T+1}, \ldots, \mathbf{x}_0)\]
-  \end{itemize}
-
-  \begin{work}
-    \begin{itemize}
-    \item Implement a RNN that learn to predict the next value of a sequence
-    \item Once trained, generate one day of prediction (24 hours)
-    \end{itemize}
-  \end{work}
+%   \end{itemize}
   
-\end{frame}
+% \end{frame}
+
+% % \begin{frame}
+% %   \frametitle{Main sequence models}
+% %   \begin{center}
+% %     \begin{tikzpicture}[=>latex]
+% %       \node (x0) [] {\(x_0\)};
+% %       \node (x1) [right of=x0] {\(x_1\)};
+% %       \node (x2) [right of=x1] {\(x_2\)};     
+% %       \node (h0) [above of=x0] {\(h_0\)};
+% %       \node (h1) [right of=h0] {\(h_1\)};
+% %       \node (h2) [right of=h1] {\(h_2\)};
+% %       \node (o) [above of=h0] {\(o\)};
+% %     \end{tikzpicture}
+% %   \end{center}
+% % \end{frame}
+
+
+% \begin{frame}{Latent autoregressive model}
+%   \begin{columns}
+%     \begin{column}{0.55\linewidth}
+%       \begin{center}
+%         \begin{tikzpicture}[=>latex, node distance=2cm]
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x0) [ ] {\(\mathbf{x}_{t-1}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x1) [right of=x0] {\(\mathbf{x}_{t}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (x2) [right of=x1] {\(\mathbf{x}_{t+1}\)};     
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h0) [above of=x0] {\(\mathbf{h}_{t-1}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h1) [right of=h0] {\(\mathbf{h}_{t}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (h2) [right of=h1] {\(\mathbf{h}_{t+1}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o0) [above of=h0] {\(\hat{\mathbf{y}}_{t-1}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o1) [right of=o0] {\(\hat{\mathbf{y}}_{t}\)};
+%           \node[rectangle, draw=black, fill=blue!50, minimum size=0.75cm] (o2) [right of=o1] {\(\hat{\mathbf{y}}_{t+1}\)};
+
+%           \node[] (hp) [left of=h0] {};
+%           \node[] (hf) [right of=h2] {};
+          
+%           \draw[->] (h0)--(h1);
+%           \draw[->] (h1)--(h2);
+%           \draw[->] (x0)--(h0);
+%           \draw[->] (x1)--(h1);
+%           \draw[->] (x2)--(h2);
+%           \draw[->] (h0)--(o0);
+%           \draw[->] (h1)--(o1);
+%           \draw[->] (h2)--(o2);
+%           \draw[->, dashed] (hp)--(h0);
+%           \draw[->, dashed] (h2)--(hf);
+%         \end{tikzpicture}
+%       \end{center}
+%     \end{column}
+%     \begin{column}{0.5\linewidth}
+%       \begin{itemize}
+%       \item \(\mathbf{h}_t = f(\mathbf{x}_{t}, \mathbf{h}_{t-1}) = \sigma_{h}\big(\mathbf{W}_{hx}\mathbf{x}_{t} + \mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{b}_h\big)\)
+%       \item \(\hat{\mathbf{y}}_t = g(\mathbf{h}_{t}) = \sigma_{o}\big(\mathbf{W}_{oh}\mathbf{h}_t+\mathbf{b}_o\big)\)
+%       \item Backpropagation through time - BPTT
+%         \[\ell = \frac{1}{T}\sum_{t=1}^T\ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})\]
+%         with \(\mathbf{h}_{0}= \mathbf{0}\)
+%       \end{itemize}
+      
+%     \end{column}
+%   \end{columns}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Issue with BPTT}
+%   \begin{align*}
+%     \frac{\partial \ell}{\partial \mathbf{W}_{hh}} =&    \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial \mathbf{W}_{hh}} \\
+%     =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial{\hat{\mathbf{y}}}_{t}}{\partial \mathbf{W}_{hh}} \\
+%     =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} + \frac{f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial\mathbf{h}_{t-1}}\frac{\partial \mathbf{h}_{t-1}}{\partial \mathbf{W}_{hh}}\bigg]\\
+%     =&  \frac{1}{T}\sum_{t=1}^T\frac{\partial \ell(\mathbf{y}_{t}, {\hat{\mathbf{y}}}_{t})}{\partial {\hat{\mathbf{y}}}_{t}}\frac{\partial g(\mathbf{h}_{t})}{\partial\mathbf{h}_t}\Bigg[\frac{\partial f(\mathbf{x}_{t}, \mathbf{h}_{t-1})}{\partial \mathbf{W}_{hh}} +  \textcolor{blue}{ \sum_{p=1}^{t-1}\bigg(\prod_{q=p+1}^{t} \frac{\partial f(\mathbf{x}_{q}, \mathbf{h}_{q-1})}{\partial \mathbf{h}_{q-1}} \bigg) \frac{\partial f(\mathbf{x}_{p}, \mathbf{h}_{p-1})}{\partial \mathbf{W}_{hh}}}\Bigg]\\
+%   \end{align*}
+  
+% \end{frame}
+
+% \subsection{Modern RNN}
+
+% \begin{frame}[fragile]
+%   \frametitle{Long Short Term Memory  (LSTM)}
+%   \begin{columns}
+%     \begin{column}{0.6\linewidth}
+%       \newcommand{\empt}[2]{$\mathbf{#1}^{(#2)}$}
+      
+%       \resizebox{\linewidth}{!}{\begin{tikzpicture}[
+%         % GLOBAL CFG
+%         font=\sf \scriptsize,
+%         >=LaTeX,
+%         % Styles
+%         cell/.style={% For the main box
+%           rectangle, 
+%           rounded corners=5mm, 
+%           draw,
+%           very thick,
+%         },
+%         operator/.style={%For operators like +  and  x
+%           circle,
+%           draw,
+%           inner sep=-0.5pt,
+%           minimum height =.5cm,
+%         },
+%         function/.style={%For functions
+%           ellipse,
+%           draw,
+%           inner sep=1pt
+%         },
+%         ct/.style={% For external inputs and outputs
+%           circle,
+%           draw,
+%           line width = .75pt,
+%           minimum width=1cm,
+%           inner sep=1pt,
+%         },
+%         gt/.style={% For internal inputs
+%           rectangle,
+%           draw,
+%           minimum width=4mm,
+%           minimum height=3mm,
+%           inner sep=1pt
+%         },
+%         mylabel/.style={% something new that I have learned
+%           font=\scriptsize\sffamily
+%         },
+%         ArrowC1/.style={% Arrows with rounded corners
+%           rounded corners=.25cm,
+%           thick,
+%         },
+%         ArrowC2/.style={% Arrows with big rounded corners
+%           rounded corners=.5cm,
+%           thick,
+%         },
+%         ]
+
+%         % Start drawing the thing...    
+%         % Draw the cell: 
+%         \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
+
+%         % Draw inputs named ibox#
+%         \node [gt, label={[mylabel, shift={(0,0.25)}]left:\(\mathbf{F}_t\)}] (ibox1) at (-2,-0.75) {$\sigma$};
+%         \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{I}_t\)}] (ibox2) at (-1.5,-0.75) {$\sigma$};
+%         \node [gt, minimum width=1cm, label={[mylabel, shift={(-0.125,0.25)}]right:\(\tilde{\mathbf{C}}_t\)}] (ibox3) at (-0.5,-0.75) {$\tanh$};
+%         \node [gt, label={[mylabel, shift={(0,0.25)}]right:\(\mathbf{O}_t\)}] (ibox4) at (0.5,-0.75) {$\sigma$};
+
+%         % Draw opérators   named mux# , add# and func#
+%         \node [operator] (mux1) at (-2,1.5) {$\times$};
+%         \node [operator] (add1) at (-0.5,1.5) {+};
+%         \node [operator] (mux2) at (-0.5,0) {$\times$};
+%         \node [operator] (mux3) at (1.5,0) {$\times$};
+%         \node [function] (func1) at (1.5,0.75) {$\tanh$};
+
+%         % Draw External inputs? named as basis c,h,x
+%         \node[ct] (c) at (-4,1.5) {\empt{c}{t-1}};
+%         \node[ct] (h) at (-4,-1.5) {\empt{h}{t-1}};
+%         \node[ct] (x) at (-2.5,-3) {\empt{x}{t}};
+
+%         % Draw External outputs? named as basis c2,h2,x2
+%         \node[ct] (c2) at (4,1.5) {\empt{c}{t}};
+%         \node[ct] (h2) at (4,-1.5) {\empt{h}{t}};
+%         % \node[ct, label={[mylabel]left:Label3}] (x2) at (2.5,3) {\empt{h}{t}};
+
+%         % Start connecting all.
+%         % Intersections and displacements are used. 
+%         % Drawing arrows    
+%         \draw [ArrowC1] (c) -- (mux1) -- (add1) -- (c2);
+
+%         % Inputs
+%         \draw [ArrowC2] (h) -| (ibox4);
+%         \draw [ArrowC1] (h -| ibox1)++(-0.5,0) -| (ibox1); 
+%         \draw [ArrowC1] (h -| ibox2)++(-0.5,0) -| (ibox2);
+%         \draw [ArrowC1] (h -| ibox3)++(-0.5,0) -| (ibox3);
+%         \draw [ArrowC1] (x) -- (x |- h)-| (ibox3);
+
+%         % Internal
+%         \draw [->, ArrowC2] (ibox1) -- (mux1);
+%         \draw [->, ArrowC2] (ibox2) |- (mux2);
+%         \draw [->, ArrowC2] (ibox3) -- (mux2);
+%         \draw [->, ArrowC2] (ibox4) |- (mux3);
+%         \draw [->, ArrowC2] (mux2) -- (add1);
+%         \draw [->, ArrowC1] (add1 -| func1)++(-0.5,0) -| (func1);
+%         \draw [->, ArrowC2] (func1) -- (mux3);
+
+%         % Outputs
+%         \draw [-, ArrowC2] (mux3) |- (h2);
+%         % \draw (c2 -| x2) ++(0,-0.1) coordinate (i1);
+%         % \draw [-, ArrowC2] (h2 -| x2)++(-0.5,0) -| (i1);
+%         % \draw [-, ArrowC2] (i1)++(0,0.2) -- (x2);
+
+%       \end{tikzpicture}}
+%     \end{column}
+%     \begin{column}{0.4\linewidth}
+%       \begin{itemize}
+%       \item Forget gate
+%         \[\mathbf{F}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{fh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{fx}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_f\Big)\]
+%       \item Input gate
+%         \[\mathbf{I}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{ih}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ix}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_i\Big)\]
+%       \item Input node
+%         \[\tilde{\mathbf{C}}_t = \tanh\Big(\textcolor{blue}{\mathbf{W}}_{\tilde{c}h}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{\tilde{c}x}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_{\tilde{c}}\Big)\]
+%       \item Output gate
+%         \[\mathbf{O}_t = \sigma\Big(\textcolor{blue}{\mathbf{W}}_{oh}\mathbf{h}_{(t-1)} + \textcolor{blue}{\mathbf{W}}_{ox}\mathbf{x}_{t} + \textcolor{blue}{\mathbf{b}}_o\Big)\]
+%       \end{itemize}
+%     \end{column}
+%   \end{columns}
+
+%   {\small Good overview of LSTM: \url{https://colah.github.io/posts/2015-08-Understanding-LSTMs/}}
+% \end{frame}
+
+% \begin{frame}[fragile]
+%   \frametitle{Sequence prediction with RNN 1/2}
+%   \begin{block}{Learning problem}
+%     Learn a function \(f\) that, given a fix sized sequence of measurements, predicts the most probable next one
+
+%     \begin{center}
+%       \begin{tikzpicture}
+%         \begin{axis}[small, width=0.75\linewidth, height=0.25\linewidth, ylabel=Temperature (°C), xlabel=Time(s)]
+%           \addplot[red,  only marks] coordinates{%
+%             ( 0.0, -8.31 )
+%             (  3600.0,  -7.98)
+%             (  7200.0, -8.765)
+%             ( 10800.0,   -8.9)
+%             ( 14400.0,  -9.41)
+%             ( 18000.0, -9.675)
+%             ( 21600.0,  -9.29)
+%             ( 25200.0,   -8.5)
+%             ( 28800.0, -8.005)
+%             ( 32400.0, -7.425)
+%             ( 36000.0, -7.205)
+%             ( 39600.0, -7.295)
+%             ( 43200.0, -6.655)
+%             ( 46800.0, -5.885)
+%             ( 50400.0,  -5.76)
+%             ( 54000.0,  -5.48)
+%             ( 57600.0,   -5.3)
+%             ( 61200.0,  -5.26)
+%             ( 64800.0,  -5.12)
+%             ( 68400.0,   -4.9)
+%             ( 72000.0, -4.915)
+%             ( 75600.0,  -4.82)
+%             ( 79200.0,  -4.36)
+%             ( 82800.0,   -4.5)
+%             ( 86400.0,   -4.6)};          
+%           \addplot[blue, only marks] coordinates {(90000, -4.395)};
+%         \end{axis}
+%       \end{tikzpicture}
+%     \end{center}
+    
+%   \end{block}
+% \end{frame}
+
+% \begin{frame}{Sequence prediction with RNN 2/2}
+%   \begin{itemize}
+%   \item Regression problem on sequence,
+%     \[\mathbf{x}_{T+1} = f(\mathbf{x}_T, \ldots, \mathbf{x}_0)\]
+%   \item Then for longer predictions:
+%     \[\mathbf{x}_{T+2} = f(\hat{\mathbf{x}}_{T+1}, \ldots, \mathbf{x}_0)\]
+%   \end{itemize}
+
+%   \begin{work}
+%     \begin{itemize}
+%     \item Implement a RNN that learn to predict the next value of a sequence
+%     \item Once trained, generate one day of prediction (24 hours)
+%     \end{itemize}
+%   \end{work}
+  
+% \end{frame}
 
 \section{Attention Mechanisms}
 
