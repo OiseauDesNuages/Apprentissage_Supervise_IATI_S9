@@ -1113,6 +1113,76 @@ tensor([0.3730], requires_grad=True)
   \end{columns}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Convolution block, down and up-sampling}
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+\begin{minted}[fontsize=\scriptsize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{ipython3}
+class UNetConvBlock(nn.Module):
+    def __init__(self, in_channel: int, out_channel: int):
+        super().__init__()
+        self.block = nn.Sequential(
+            nn.Conv2d(in_channel, out_channel, kernel_size=3, stride=1, padding=1),
+            nn.PReLU(),
+            nn.Conv2d(out_channel, out_channel, kernel_size=3, padding=1, stride=1),
+            nn.PReLU(),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+
+        out = self.block(x)
+
+        return out
+\end{minted}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \begin{minted}[fontsize=\scriptsize,obeytabs=true,tabsize=4,bgcolor=bg,breaklines=true]{ipython3}
+class UNetUpConvBlock(nn.Module):
+    def __init__(self,in_channel: int, out_channel: int, up_factor: int = 2,
+    ):
+        super().__init__()
+        self.upsize = nn.Sequential(nn.Upsample(
+            scale_factor=up_factor, mode="bilinear", align_corners=False
+        ),
+            nn.Conv2d(in_channel, out_channel, kernel_size=1, stride=1),
+        )
+        self.conv = UNetConvBlock(in_channel, out_channel)
+
+    def forward(self, x: torch.Tensor, residue: torch.Tensor) -> torch.Tensor:
+        x = self.upsize(x)
+        x = F.interpolate(x, size=residue.shape[2:], mode="bilinear")
+        out = torch.cat([x, residue], dim=1)
+        out = self.conv(out)
+        return out
+\end{minted}
+    \end{column}
+  \end{columns}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Segmentation loss}
+
+  Use specific loss to ensure spatial consistency not individual pixel classificaiton~\cite{azad2023lossfunctionserasemantic}.  \centerline{\includegraphics[width=0.20\linewidth]{figures/im_unet.png}~\includegraphics[width=0.20\linewidth]{figures/gt_unet.png}~\includegraphics[width=0.20\linewidth]{figures/pred_unet.png}}
+
+  \begin{columns}
+    \begin{column}{0.45\linewidth}
+      \begin{itemize}
+      \item Cross entropy: {\small\[ CE = \sum_{i,j=1}^{H,W}\sum_{c=1}^C-\log(\hat{y}_{i,j,c})^{y_{i,j,c}}\]}
+      \item Dice loss: \emph{Intersection over sum}
+        {\small\[DL = 1 - \frac{1}{C}\sum_{c=1}^{C-1} \frac{2\sum_{i,j=1}^{H,W}y_{i,j,c} \hat{y}_{i,j,c}}{\sum_{i,j=1}^{H,W} (y_{i,j,c} + \hat{y}_{i,j,c})}\]}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.55\linewidth}
+      \begin{itemize}
+      \item Jacard loss: \emph{Intersection over union}
+        {\small\[JL = 1 - \frac{1}{C}\sum_{c=1}^{C-1} \frac{\sum_{i,j=1}^{H,W}y_{i,j,c} \hat{y}_{i,j,c}}{\sum_{i,j=1}^{H,W} (y_{i,j,c} + \hat{y}_{i,j,c} - \sum_{i,j=1}^{H,W}y_{i,j,c} \hat{y}_{i,j,c})}\]}
+      \item Usually, on combination of two losses
+        {\small\[L = \alpha CE + (1-\alpha) DL\]}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
 
 
 % \section{Recurrent Neural Networks}
