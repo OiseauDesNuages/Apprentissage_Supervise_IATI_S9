@@ -81,16 +81,16 @@ The =environment.yml= file is here: [[file:./environment.yml][environment.yml]]
 * Web service
 It is possible to create an account and work with GPU here: https://datalab.sspcloud.fr/
 
-** Configureation
+** Configuration
 
 ** Use
-First launch an instance =Jupyter-pytorch-gpu= with default parameters. Once connected to the instance, clone the reposistory in a shell from the jupyter-lab environment.
+First launch an instance =Jupyter-pytorch-gpu= with default parameters. Once connected to the instance, clone the repository in a shell from the jupyter-lab environment.
 
 #+begin_src sh
 git clone https://src.koda.cnrs.fr/mathieu.fauvel.4/n7_iati.git
 #+end_src
 
-I suggest to add another remote repository to save your work between session, as all the local data of the instance will be removed/delated after some days (currently 7). Suppose you have an account on gitlab.com, you can create an empty repository named "n7_iati" and commit your work there.
+I suggest to add another remote repository to save your work between session, as all the local data of the instance will be removed/deleted after some days (currently 7). Suppose you have an account on gitlab.com, you can create an empty repository named "n7_iati" and commit your work there.
 
 #+begin_src sh
 git remote add origin https://gitlab.com/mfauvel/n7_iati.git
