@@ -39,24 +39,29 @@ class UNetConvBlock(nn.Module):
     Down block for Unet
     """
 
-    def __init__(self, in_channel: int, out_channel: int):
+    def __init__(self, in_channel: int, out_channel: int, dropout: float | None = None):
         """
         Class initializer
         """
         super().__init__()
         self.block = nn.Sequential(
             nn.Conv2d(in_channel, out_channel, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(out_channel),
             nn.PReLU(),
             nn.Conv2d(out_channel, out_channel, kernel_size=3, padding=1, stride=1),
+            nn.BatchNorm2d(out_channel),
             nn.PReLU(),
         )
+        self.dropout = nn.Dropout(p=dropout) if dropout else None
+        
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Forward method
         """
         out = self.block(x)
-
+        if self.dropout:
+            out = self.dropout(out)
         return out
 
 
@@ -71,6 +76,7 @@ class UNetUpConvBlock(nn.Module):
         out_channel: int,
         upmode: UpsamplingMode,
         up_factor: int = 2,
+        dropout: float | None = None
     ):
         """
         Class initializer
@@ -92,7 +98,7 @@ class UNetUpConvBlock(nn.Module):
         else:
             raise ValueError(upmode)
 
-        self.conv = UNetConvBlock(in_channel, out_channel)
+        self.conv = UNetConvBlock(in_channel, out_channel, dropout = dropout)
 
     def forward(self, x: torch.Tensor, residue: torch.Tensor) -> torch.Tensor:
         """
@@ -119,6 +125,7 @@ class SRUNet(nn.Module):
         interp_mode: str = "bilinear",
         scale_factor: float | None = None,
         up_mode: UpsamplingMode = "upsample",
+        dropout: float | None = None
     ):
         """
         Class initializer
@@ -136,11 +143,12 @@ class SRUNet(nn.Module):
         prev_channels = self.in_channels
         self.encoding_module = nn.ModuleList()
         self.upmode = up_mode
+        self.dropout = None
 
         for i in range(self.depth):
             self.encoding_module.append(
                 UNetConvBlock(
-                    in_channel=prev_channels, out_channel=2 ** (self.growth_factor + i)
+                    in_channel=prev_channels, out_channel=2 ** (self.growth_factor + i), dropout=dropout
                 )
             )
             prev_channels = 2 ** (self.growth_factor + i)
@@ -150,7 +158,7 @@ class SRUNet(nn.Module):
         for i in reversed(range(self.depth - 1)):
             self.decoding_module.append(
                 UNetUpConvBlock(
-                    prev_channels, 2 ** (self.growth_factor + i), upmode="upconv"
+                    prev_channels, 2 ** (self.growth_factor + i), upmode="upconv", dropout=dropout
                 )
             )
             prev_channels = 2 ** (self.growth_factor + i)
