@@ -1184,6 +1184,18 @@ class UNetUpConvBlock(nn.Module):
   \end{columns}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Experiments}
+  \begin{work}
+    \begin{itemize}
+    \item Apply UNET for the segmentation task: take a look at the proposed architecture and at \textsl{torch.bfloat16} dtype
+    \item Investigate one of the different loss, split across groups
+    \item Implement the \textsl{predict\_proba} and \textsl{predit} methods
+    \item Optional: change the depth of the UNET
+    \end{itemize}
+  \end{work}
+\end{frame}
+
 
 % \section{Recurrent Neural Networks}
 
@@ -1529,7 +1541,7 @@ class UNetUpConvBlock(nn.Module):
     \[\mathcal{DB} \stackrel{\textrm{def}}{=} \big\{(\mathbf{k}_1, \mathbf{v}_1), \ldots, (\mathbf{k}_m, \mathbf{v}_m)\big\}\]
 
   \item Exact match for query \(\mathbf{q} = \mathbf{k}_i\) return value \(\mathbf{v}_i\), i.e.,
-    \[f(\mathbf{q}) = \mathbf{v}_i\]
+    \[a(\mathbf{q}) = \mathbf{v}_i\]
 
   \item<2-> Approximate match for \(\mathbf{q}\): Linear combination of values for \emph{\textcolor{blue}{close}} keys
   \end{itemize}
@@ -1541,17 +1553,33 @@ class UNetUpConvBlock(nn.Module):
 
 \begin{frame}{Example with time}
 
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[domain=0:100, samples=1001, small, grid, ymin = -0.05, ymax=1, xmin=0, xmax=105, axis lines*=left,]
-        \addplot[red, thick] {exp(-(25-x)*(25-x)/100)};
-        \addplot[black, thick, samples at = {10, 30, 50, 55, 68, 85 ,90 ,100}, only marks] {exp(-(25-x)*(25-x)/100)};
-        \addplot[dashed, black , thick] coordinates {(25, 0) (25, 2)};
-        \node[above, right] at (25, 0) {\(t_q\)};
-      \end{axis}
-    \end{tikzpicture}
-  \end{center}
-  
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+      \begin{center}
+        \begin{tikzpicture}
+          \begin{groupplot}[group style={group size= 1 by 2, ylabels at = edge left}, domain=0:100, samples=1001, small, grid, ymin = -0.05, ymax=1, xmin=0, xmax=105, axis lines=left, xlabel={\(t\)}, ,height=0.5\linewidth]
+            \nextgroupplot[ylabel={\(f(t)\)}, ymin=-1, ymax=1]
+            \addplot[thick, black] {cos(x*3.14) + 0.05*rand};
+            \addplot[thick, red, samples at = {10, 30, 50, 55, 68, 85 ,90 ,100}, only marks] {cos(x*3.14)};
+          
+            \nextgroupplot[ylabel={\(a(t)\)}]
+            \addplot[red, thick] {exp(-(25-x)*(25-x)/100)};
+            \addplot[black, thick, samples at = {10, 30, 50, 55, 68, 85 ,90 ,100}, only marks] {exp(-(25-x)*(25-x)/100)};
+            \addplot[dashed, black , thick] coordinates {(25, 0) (25, 2)};
+            \node[below, right] at (25, 10) {\(t_q\)};
+          \end{groupplot}
+        \end{tikzpicture}
+      \end{center}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \[a_{t_q}(t) = \exp\left(-\frac{(t_q-t)^2}{100}\right)\]
+      \begin{eqnarray*}
+        f(t_q) &=& \sum_{i=1}^8 a_{t_q}(t_i)f(t_i)\\
+               &=& 0.1f(t_1)  + 0.8f(t_2) + 0.002f(t_3)        
+      \end{eqnarray*}
+    \end{column}
+    
+  \end{columns}
 \end{frame}
 \subsection{Attention Score}
 
