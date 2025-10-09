@@ -1583,10 +1583,10 @@ class UNetUpConvBlock(nn.Module):
 \end{frame}
 \subsection{Attention Score}
 
-\begin{frame}{Dot product attention}
+\begin{frame}{Dot product attention 1/2}
  
   \begin{columns}
-    \begin{column}[t]{0.5\linewidth}
+    \begin{column}[t]{0.4\linewidth}
       \begin{itemize}
       \item Scaled dot product
         \[\alpha(\mathbf{q}, \mathbf{k}_i) = \dfrac{\exp(\mathbf{q}^\top \mathbf{k}_i / \sqrt{d})}{\sum_{j=1}^m \exp(\mathbf{q}^\top \mathbf{k}_j / \sqrt{d})}\]
@@ -1598,24 +1598,28 @@ class UNetUpConvBlock(nn.Module):
       \end{itemize}
     \end{column}
 
-    \begin{column}[t]{0.5\linewidth}
+    \begin{column}[t]{0.6\linewidth}
       \begin{itemize}
-      \item Time Series:
-        \begin{itemize}
-        \item \(t_i \rightarrow \mathbf{k}_i\)
-        \item \(\mathbf{x}_i \rightarrow \mathbf{v}_i\)
-        \item \(t \rightarrow \mathbf{q}\)
-        \end{itemize}
+      \item Time Series: \(t_i \rightarrow \mathbf{k}_i\), \(\mathbf{x}_i \rightarrow \mathbf{v}_i\), \(t \rightarrow \mathbf{q}\)
+        % \begin{itemize}
+        % \item \(t_i \rightarrow \mathbf{k}_i\)
+        % \item \(\mathbf{x}_i \rightarrow \mathbf{v}_i\)
+        % \item \(t \rightarrow \mathbf{q}\)
+        % \end{itemize}
       \item In practice
         \begin{itemize}
         \item Use embedding for \(t\)
           \begin{align*}
-            t \mapsto  \mathbf{e} = & [\cos(2\pi \omega_1t),\ldots,\cos(2\pi \omega_Et),\\
-              & \sin(2\pi \omega_1t),\ldots,\sin(2\pi \omega_Et)]
+            e:\mathbb{R}& \to \mathbb{R}^{E} \\ 
+            t  & \mapsto  e(t) = &[\cos(2\pi \omega_1t),\ldots,\cos(2\pi \omega_Et),\\
+                       & & \sin(2\pi \omega_1t),\ldots,\sin(2\pi \omega_Et)]
           \end{align*}
           \item Then go trough linear layer
-            \[\mathbf{k}_i = \mathbf{W}_k\mathbf{e}_i\]
-            \[\mathbf{v}_i = \mathbf{W}_v\mathbf{x}_i\]
+            \begin{align*}
+              \mathbf{k}_i &= \mathbf{W}_ke(t_i)\\
+              \mathbf{v}_i &= \mathbf{W}_v\mathbf{x}_i\\
+              \mathbf{q} &= \mathbf{W}_qe(t)\\
+            \end{align*}
         \end{itemize}
       \end{itemize}
       
@@ -1654,12 +1658,32 @@ class UNetUpConvBlock(nn.Module):
   \in \mathbb{R}^{B\times (EH)} \] 
    \end{itemize}
   
-  \begin{work}
-    Implement time series interpolation using \emph{Attention Mechanisms}.
-  \end{work}
+  % \begin{work}
+  %   Implement time series interpolation using \emph{Attention Mechanisms}.
+  % \end{work}
 \end{frame}
 
-
+\begin{frame}
+  \frametitle{Transformer architecture}
+  Major breakthrough in NLP: \fullcite{vaswani2023attentionneed}
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+      \begin{itemize}
+      \item Use (again) encoder-decoder architecture
+      \item No sequence alignement 
+      \item Use positional encoding
+      \item Regularization: dropout and label smoothing
+      \item \url{https://jalammar.github.io/illustrated-transformer/}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+      \begin{center}
+        \input{figures/transformer.tex}
+      \end{center}
+    \end{column}
+  \end{columns}
+  
+\end{frame}
 
 
 % \begin{frame}[fragile,allowframebreaks]{Bibliography}
