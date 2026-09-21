@@ -69,8 +69,8 @@ The evaluation will be
 - Home Labwork: 40%, by pair.
 - Exam: 60%, individual (notes and course materials allowed).
   
-* Python Environnment
-You can recover the environment used for the labworks with (for linux OS):
+* Python Environment
+You can recover the environment used for the labworks with (for conda users):
 #+begin_src sh
 # replace my-env by the name you want
 conda env create --name my-env --file environment.yml
@@ -82,7 +82,8 @@ The =environment.yml= file is here: [[file:./environment.yml][environment.yml]]
 It is possible to create an account and work with GPU here: https://datalab.sspcloud.fr/
 
 ** Configuration
-
+Nothing to do, just authenticate yourself.
+. 
 ** Use
 First launch an instance =Jupyter-pytorch-gpu= with default parameters. Once connected to the instance, clone the repository in a shell from the jupyter-lab environment.
 

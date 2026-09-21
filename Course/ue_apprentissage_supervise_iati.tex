@@ -1077,7 +1077,7 @@ tensor([0.3730], requires_grad=True)
     \end{tikzpicture}
   \end{center}
   \begin{align*}
-    \dfrac{\partial f(\mathbf{x})}{\partial \alpha_0} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_1}{g_0}\circ\dfrac{g_0}{\alpha_0}(\mathbf{x}) + \dfrac{g_0}{\alpha_0}(\mathbf{x}) 
+    \dfrac{\partial f(\mathbf{x})}{\partial \theta_0} = \dfrac{g_2}{g_1}\circ\dfrac{g_1}{g_0}\circ\dfrac{g_0}{\theta_0}(\mathbf{x}) + \dfrac{g_1}{g_0}\circ\dfrac{g_0}{\theta_0}(\mathbf{x}) + \dfrac{g_0}{\theta_0}(\mathbf{x}) 
   \end{align*}
   \begin{itemize}
   \item Improve gradient propagation
@@ -1102,7 +1102,7 @@ tensor([0.3730], requires_grad=True)
       \item Encoder - Decoder
       \item Skip connection
       \item Multi-scale analysis
-      \item Initially propose for segmentation
+      \item Initially proposed for segmentation
       \end{itemize}
     \end{column}
     \begin{column}{0.5\linewidth}
